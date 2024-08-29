@@ -31,6 +31,8 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "src/vite-env.d.ts",
+    "src/config/env.ts"
   ],
 }
