@@ -14,6 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { IconMoon, IconSun } from "@tabler/icons-react";
+import { Logo, CurrencyFilter } from "../";
 
 export function Header() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -35,7 +36,7 @@ export function Header() {
             <header className={classes.header}>
                 <Container size="lg" className={classes.container}>
                     <Group justify="space-between" h="100%">
-                        CoinEcho
+                        <Logo />
                         <Group h="100%" gap={0} visibleFrom="sm">
                             <Link to="/" className={classes.link}>
                                 Home
@@ -57,6 +58,7 @@ export function Header() {
                                     <IconSun style={{ width: rem(24), height: rem(24) }} />
                                 )}
                             </ActionIcon>
+                            <CurrencyFilter />
                             <Button>Log In</Button>
                         </Group>
                         <Burger
@@ -75,7 +77,7 @@ export function Header() {
                 padding="md"
                 title="CoinEcho"
                 hiddenFrom="sm"
-                zIndex={1000000}
+                zIndex={999999}
                 classNames={{
                     header: "bg-secondary",
                 }}
@@ -109,6 +111,7 @@ export function Header() {
                                 <IconSun style={{ width: rem(24), height: rem(24) }} />
                             )}
                         </ActionIcon>
+                        <CurrencyFilter />
                         <Button>Log In</Button>
                     </Group>
                 </ScrollArea>
