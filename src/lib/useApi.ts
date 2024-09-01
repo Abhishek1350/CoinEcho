@@ -1,6 +1,11 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import Api from "./api";
-import { CoinsResponse, News } from "./types";
+import {
+    CoinsResponse,
+    GlobalStatsResponse,
+    CoinDetailsResponse,
+    NewsResponse,
+} from "./types";
 
 function useBaseQuery<T>(
     queryKey: any[],
@@ -11,6 +16,14 @@ function useBaseQuery<T>(
         queryFn,
     });
 }
+
+export const useGlobalStats = (
+    params: { referenceCurrencyUuid?: string } = {}
+) => {
+    return useBaseQuery<GlobalStatsResponse>(["globalStats", params], () =>
+        Api.getGlobalStats(params)
+    );
+};
 
 export const useAllCoins = (
     params: {
@@ -32,11 +45,13 @@ export const useCoinDetails = (
         timePeriod?: string;
     } = {}
 ) => {
-    return useBaseQuery<CoinsResponse>(["coinDetail", coinId, params], () =>
+    return useBaseQuery<CoinDetailsResponse>(["coinDetail", coinId, params], () =>
         Api.getCoinDetails(coinId, params)
     );
 };
 
 export const useNews = (provider: string) => {
-    return useBaseQuery<News[]>(["news", provider], () => Api.getNews(provider));
+    return useBaseQuery<NewsResponse>(["news", provider], () =>
+        Api.getNews(provider)
+    );
 };

@@ -5,7 +5,12 @@ import {
     newsApiHost,
     rapidApiKey,
 } from "@/config/env";
-import { CoinsResponse, News } from "./types";
+import {
+    CoinsResponse,
+    GlobalStatsResponse,
+    CoinDetailsResponse,
+    NewsResponse,
+} from "./types";
 import { buildUrlWithParams } from "./utils";
 
 class Api {
@@ -29,6 +34,15 @@ class Api {
         return response.json();
     }
 
+    public static getGlobalStats(
+        params: {
+            referenceCurrencyUuid?: string;
+        } = {}
+    ): Promise<GlobalStatsResponse> {
+        const url = buildUrlWithParams(`${cryptoApiBaseUrl}/stats`, params);
+        return this.fetchJson<GlobalStatsResponse>(url, "coins");
+    }
+
     public static getAllCoins(
         params: {
             referenceCurrencyUuid?: string;
@@ -47,14 +61,14 @@ class Api {
             referenceCurrencyUuid?: string;
             timePeriod?: string;
         } = {}
-    ): Promise<CoinsResponse> {
+    ): Promise<CoinDetailsResponse> {
         const url = buildUrlWithParams(`${cryptoApiBaseUrl}/${coinId}`, params);
-        return this.fetchJson<CoinsResponse>(url, "coins");
+        return this.fetchJson<CoinDetailsResponse>(url, "coins");
     }
 
-    public static getNews(provider: string): Promise<News[]> {
+    public static getNews(provider: string): Promise<NewsResponse> {
         const url = `${newsApiBaseUrl}/${provider}`;
-        return this.fetchJson<News[]>(url, "news");
+        return this.fetchJson<NewsResponse>(url, "news");
     }
 }
 

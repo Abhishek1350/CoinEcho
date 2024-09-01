@@ -60,20 +60,41 @@ export interface Coin extends ListsCoin {
     tags: string[];
 }
 
-export interface Stats {
-    total: number;
+export interface StatsCoin {
+    uuid: string;
+    symbol: string;
+    name: string;
+    iconUrl: string;
+    coinrankingUrl: string;
+}
+
+export interface GlobalStats {
     totalCoins: number;
     totalMarkets: number;
     totalExchanges: number;
     totalMarketCap: string;
     total24hVolume: string;
+    btcDominance: number;
+    bestCoins: StatsCoin[];
+    newestCoins: StatsCoin[];
+}
+
+export interface GlobalStatsResponse {
+    status: string;
+    data: GlobalStats;
 }
 
 export interface CoinsResponse {
     status: string;
     data: {
-        stats: Stats;
         coins: ListsCoin[];
+    };
+}
+
+export interface CoinDetailsResponse {
+    status: string;
+    data: {
+        coin: Coin;
     };
 }
 
@@ -83,4 +104,8 @@ export interface News {
     description: string;
     thumbnail: string;
     createdAt: Date;
+}
+
+export interface NewsResponse {
+    data: News[];
 }
