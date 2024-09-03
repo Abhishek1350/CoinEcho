@@ -41,8 +41,8 @@ export function Header() {
                             <Link to="/" className={classes.link}>
                                 Home
                             </Link>
-                            <Link to="/news" className={classes.link}>
-                                News
+                            <Link to="/crypto-news" className={classes.link}>
+                                Crypto News
                             </Link>
                         </Group>
                         <Group visibleFrom="sm">

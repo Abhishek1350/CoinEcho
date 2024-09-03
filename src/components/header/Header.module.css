@@ -16,15 +16,10 @@
   padding-right: var(--mantine-spacing-md);
   text-decoration: none;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
-  font-weight: 500;
-  font-size: var(--mantine-font-size-sm);
-
-  @media (max-width: $mantine-breakpoint-sm) {
-    height: rem(42px);
-    width: 100%;
-  }
+  font-weight: 600;
+  font-size: var(--mantine-font-size-md);
 
   @mixin hover {
-    color: blue;
+    color: rgb(26, 26, 255);
   }
 }
