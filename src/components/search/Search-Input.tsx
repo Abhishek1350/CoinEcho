@@ -6,6 +6,7 @@ import {
     Modal,
     Divider,
     Text,
+    NumberFormatter
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import classes from "./Search.module.css";
@@ -13,6 +14,7 @@ import { useState } from "react";
 import { SearchItem, SearchItemLoder } from "./Search-Item";
 import { useDisclosure, useDebouncedValue } from "@mantine/hooks";
 import { useSearch } from "@/hooks/useSearch";
+import { useCurrency } from "@/context/Currency-Context";
 
 export function SearchInput({
     totalCoins,
@@ -22,6 +24,7 @@ export function SearchInput({
     const [query, setQuery] = useState("");
     const [opened, { open, close }] = useDisclosure(false);
     const [debouncedQuery] = useDebouncedValue(query, 500);
+    const { selectedCurrency } = useCurrency();
 
     const {
         data: searchResult,
@@ -46,7 +49,7 @@ export function SearchInput({
             return <NoResultElement query={debouncedQuery} />;
 
         return searchResult.map((coin) => (
-            <SearchItem key={coin.uuid} {...coin} showDivider />
+            <SearchItem key={coin.uuid} {...coin} selectedCurrency={selectedCurrency} showDivider />
         ));
     }
 
@@ -115,7 +118,7 @@ function ErrorElement() {
 function EmptyElement({ totalCoins }: { totalCoins: number | undefined }) {
     return (
         <Text c="dimmed" ta="center" fw={600}>
-            Search in {totalCoins} Cryptocurrencies
+            Search in <NumberFormatter value={totalCoins} thousandSeparator /> Cryptocurrencies
         </Text>
     );
 }

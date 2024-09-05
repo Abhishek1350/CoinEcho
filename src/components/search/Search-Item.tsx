@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import classes from "./Search.module.css";
 import { formatCompactCurrency } from "@/lib/utils";
+import { CurrencyFilter } from "@/lib/types";
 
 interface SearchItemProps extends ListsCoin {
     showDivider?: boolean;
+    selectedCurrency: CurrencyFilter;
 }
 
 export function SearchItem({
@@ -17,6 +19,7 @@ export function SearchItem({
     price,
     change,
     showDivider = false,
+    selectedCurrency,
 }: SearchItemProps) {
     return (
         <>
@@ -36,7 +39,8 @@ export function SearchItem({
                             </Text>
                         </Group>
                         <Text size="sm" fw={500}>
-                            ${formatCompactCurrency(Number(price))}
+                            {selectedCurrency.sign}
+                            {formatCompactCurrency(Number(price))}
                         </Text>
                     </div>
 

@@ -1,16 +1,10 @@
 import { Menu, Avatar, UnstyledButton, Group, Text } from "@mantine/core";
 import { CurrencyFilters } from "@/config/filters";
-import { useState } from "react";
-import { CurrencyFilter as ICurrencyFilter } from "@/lib/types";
+import { useCurrency } from "@/context/Currency-Context";
 
 export function CurrencyFilter() {
-  const [selectedFilter, setSelectedFilter] = useState<ICurrencyFilter>(
-    CurrencyFilters[0]
-  );
+  const { selectedCurrency, handleCurrencyChange } = useCurrency();
 
-  function handleFilterClick(filter: ICurrencyFilter) {
-    setSelectedFilter(filter);
-  }
   return (
     <Menu
       withArrow
@@ -20,15 +14,18 @@ export function CurrencyFilter() {
       <Menu.Target>
         <UnstyledButton miw={70}>
           <Group gap={8}>
-            <Avatar src={selectedFilter.iconUrl} size="sm" />
-            <Text>{selectedFilter.symbol}</Text>
+            <Avatar src={selectedCurrency.iconUrl} size="sm" />
+            <Text>{selectedCurrency.symbol}</Text>
           </Group>
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
         {CurrencyFilters.map((filter) => (
-          <Menu.Item key={filter.uuid}>
-            <UnstyledButton onClick={() => handleFilterClick(filter)}>
+          <Menu.Item
+            key={filter.uuid}
+            onClick={() => handleCurrencyChange(filter)}
+          >
+            <UnstyledButton component="div">
               <Group gap={10}>
                 <Avatar src={filter.iconUrl} />
                 <div style={{ flex: 1 }}>

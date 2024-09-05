@@ -4,15 +4,20 @@ import {
   Text,
   SimpleGrid,
   NumberFormatter,
+  Skeleton,
 } from "@mantine/core";
 import classes from "./Home.module.css";
 import { SearchInput, GlobalStatItem } from "@/components";
 import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
+import { useCurrency } from "@/context/Currency-Context";
 
 export function HomePage() {
-  const { data: globalStats, isLoading: isLoadingGlobalStats } =
-    useGlobalStats();
+  const { selectedCurrency } = useCurrency();
+
+  const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(
+    { referenceCurrencyUuid: selectedCurrency.uuid }
+  );
 
   const { totalCoins, totalMarketCap, total24hVolume, btcDominance } =
     globalStats?.data || {};
@@ -20,24 +25,34 @@ export function HomePage() {
   const globalStatsMapping = [
     {
       label: "Market Cap",
-      value: formatCompactCurrency(totalMarketCap) || "...",
+      value: totalMarketCap ? (
+        `${selectedCurrency.sign}${formatCompactCurrency(totalMarketCap)}`
+      ) : (
+        <Skeleton h={20} mt={7} />
+      ),
       progress: 85,
       color: "blue",
     },
     {
       label: "24h Volume",
-      value: formatCompactCurrency(total24hVolume) || "...",
+      value: total24hVolume ? (
+        `${selectedCurrency.sign}${formatCompactCurrency(total24hVolume)}`
+      ) : (
+        <Skeleton h={20} mt={7} />
+      ),
       progress: 70,
       color: "teal",
     },
     {
       label: "Bitcoin Dominance",
-      value: (
+      value: btcDominance ? (
         <NumberFormatter
           value={btcDominance || "..."}
           suffix="%"
           decimalScale={4}
         />
+      ) : (
+        <Skeleton h={20} mt={7} />
       ),
       progress: 70,
       color: "orange",
@@ -47,6 +62,7 @@ export function HomePage() {
   return (
     <section className={classes.section}>
       <Container size="lg">
+      <Skeleton h={100} mt={7} />
         <Title className={classes.title} ta="center">
           Explore the{" "}
           <Text inherit className={classes.highlight} component="span">
