@@ -7,7 +7,7 @@ import {
     NewsResponse,
 } from "./types";
 
-const REFETCH__INTERVAl = (time: number) => 1000 * 60 * time
+const REFETCH__INTERVAl = (time: number) => 1000 * 60 * time;
 
 function useBaseQuery<T>(
     queryKey: any[],
@@ -27,20 +27,10 @@ function useBaseQuery<T>(
 export const useGlobalStats = (
     params: { referenceCurrencyUuid?: string } = {}
 ) => {
-    return useBaseQuery<GlobalStatsResponse>(["globalStats", params], () =>
-        Api.getGlobalStats(params), REFETCH__INTERVAl(2)
-    );
-};
-
-export const useSearchCoins = (
-    params: {
-        referenceCurrencyUuid?: string;
-        timePeriod?: string;
-        limit?: number;
-    } = {}
-) => {
-    return useBaseQuery<CoinsResponse>(["coins", params], () =>
-        Api.getAllCoins(params)
+    return useBaseQuery<GlobalStatsResponse>(
+        ["globalStats", params],
+        () => Api.getGlobalStats(params),
+        REFETCH__INTERVAl(2)
     );
 };
 
@@ -52,8 +42,10 @@ export const useAllCoins = (
         offset?: number;
     } = {}
 ) => {
-    return useBaseQuery<CoinsResponse>(["coins", params], () =>
-        Api.getAllCoins(params), REFETCH__INTERVAl(1)
+    return useBaseQuery<CoinsResponse>(
+        ["coins", params],
+        () => Api.getAllCoins(params),
+        REFETCH__INTERVAl(1)
     );
 };
 
@@ -64,13 +56,17 @@ export const useCoinDetails = (
         timePeriod?: string;
     } = {}
 ) => {
-    return useBaseQuery<CoinDetailsResponse>(["coinDetail", coinId, params], () =>
-        Api.getCoinDetails(coinId, params), REFETCH__INTERVAl(1)
+    return useBaseQuery<CoinDetailsResponse>(
+        ["coinDetail", coinId, params],
+        () => Api.getCoinDetails(coinId, params),
+        REFETCH__INTERVAl(1)
     );
 };
 
 export const useNews = (provider: string) => {
-    return useBaseQuery<NewsResponse>(["news", provider], () =>
-        Api.getNews(provider), REFETCH__INTERVAl(2)
+    return useBaseQuery<NewsResponse>(
+        ["news", provider],
+        () => Api.getNews(provider),
+        REFETCH__INTERVAl(2)
     );
 };
