@@ -24,7 +24,9 @@ export function buildUrlWithParams(
  * @param {number} value - The number to format.
  * @returns {string} The formatted string.
  */
-export const formatCompactCurrency = (value: number) => {
+export const formatCompactCurrency = (value: number | string | undefined) => {
+    if (!value) return "";
+    if (typeof value === "string") value = Number(value);
     const formatter = new Intl.NumberFormat("en-US", {
         notation: "compact",
     });
