@@ -7,13 +7,20 @@ import {
     NewsResponse,
 } from "./types";
 
+const REFETCH__INTERVAl = (time: number) => 1000 * 60 * time
+
 function useBaseQuery<T>(
     queryKey: any[],
-    queryFn: () => Promise<T>
+    queryFn: () => Promise<T>,
+    refetchInterval?: number
 ): UseQueryResult<T> {
     return useQuery({
         queryKey,
         queryFn,
+        refetchInterval,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: true,
     });
 }
 
@@ -21,7 +28,19 @@ export const useGlobalStats = (
     params: { referenceCurrencyUuid?: string } = {}
 ) => {
     return useBaseQuery<GlobalStatsResponse>(["globalStats", params], () =>
-        Api.getGlobalStats(params)
+        Api.getGlobalStats(params), REFETCH__INTERVAl(2)
+    );
+};
+
+export const useSearchCoins = (
+    params: {
+        referenceCurrencyUuid?: string;
+        timePeriod?: string;
+        limit?: number;
+    } = {}
+) => {
+    return useBaseQuery<CoinsResponse>(["coins", params], () =>
+        Api.getAllCoins(params)
     );
 };
 
@@ -34,7 +53,7 @@ export const useAllCoins = (
     } = {}
 ) => {
     return useBaseQuery<CoinsResponse>(["coins", params], () =>
-        Api.getAllCoins(params)
+        Api.getAllCoins(params), REFETCH__INTERVAl(1)
     );
 };
 
@@ -46,12 +65,12 @@ export const useCoinDetails = (
     } = {}
 ) => {
     return useBaseQuery<CoinDetailsResponse>(["coinDetail", coinId, params], () =>
-        Api.getCoinDetails(coinId, params)
+        Api.getCoinDetails(coinId, params), REFETCH__INTERVAl(1)
     );
 };
 
 export const useNews = (provider: string) => {
     return useBaseQuery<NewsResponse>(["news", provider], () =>
-        Api.getNews(provider)
+        Api.getNews(provider), REFETCH__INTERVAl(2)
     );
 };
