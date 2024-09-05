@@ -55,6 +55,15 @@ class Api {
         return this.fetchJson<CoinsResponse>(url, "coins");
     }
 
+    public static searchCoins(params: {
+        search: string;
+        referenceCurrencyUuid?: string;
+        limit?: number;
+    }): Promise<CoinsResponse> {
+        const url = buildUrlWithParams(`${cryptoApiBaseUrl}/coins`, params);
+        return this.fetchJson<CoinsResponse>(url, "coins");
+    }
+
     public static getCoinDetails(
         coinId: string,
         params: {
