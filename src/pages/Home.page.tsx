@@ -3,17 +3,12 @@ import {
   Title,
   Text,
   SimpleGrid,
-  Paper,
-  Group,
-  RingProgress,
-  Center,
   NumberFormatter,
 } from "@mantine/core";
 import classes from "./Home.module.css";
-import { SearchInput } from "@/components";
+import { SearchInput, GlobalStatItem } from "@/components";
 import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
-import { IconArrowUpRight } from "@tabler/icons-react";
 
 export function HomePage() {
   const { data: globalStats, isLoading: isLoadingGlobalStats } =
@@ -70,38 +65,16 @@ export function HomePage() {
         </Text>
         <SimpleGrid cols={{ base: 1, sm: 3 }} maw={800} mx="auto" my="xl">
           {globalStatsMapping.map((stat) => (
-            <Paper
-              withBorder
-              radius="md"
-              p="xs"
+            <GlobalStatItem
               key={stat.label}
-              className="bg-secondary"
-            >
-              <Group>
-                <RingProgress
-                  size={80}
-                  roundCaps
-                  thickness={8}
-                  sections={[{ value: stat.progress, color: stat.color }]}
-                  label={
-                    <Center>
-                      <IconArrowUpRight size={20} stroke={1.5} />
-                    </Center>
-                  }
-                />
-                <div>
-                  <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
-                    {stat.label}
-                  </Text>
-                  <Text fw={700} size="xl">
-                    {stat?.value}
-                  </Text>
-                </div>
-              </Group>
-            </Paper>
+              value={stat.value}
+              label={stat.label}
+              progress={stat.progress}
+              color={stat.color}
+            />
           ))}
         </SimpleGrid>
-        <SearchInput />
+        <SearchInput totalCoins={totalCoins} />
       </Container>
     </section>
   );

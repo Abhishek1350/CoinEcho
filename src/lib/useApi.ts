@@ -18,9 +18,6 @@ function useBaseQuery<T>(
         queryKey,
         queryFn,
         refetchInterval,
-        refetchOnWindowFocus: false,
-        refetchOnMount: false,
-        refetchOnReconnect: true,
     });
 }
 
