@@ -6,7 +6,7 @@ import {
     Modal,
     Divider,
     Text,
-    NumberFormatter
+    NumberFormatter,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import classes from "./Search.module.css";
@@ -49,7 +49,12 @@ export function SearchInput({
             return <NoResultElement query={debouncedQuery} />;
 
         return searchResult.map((coin) => (
-            <SearchItem key={coin.uuid} {...coin} selectedCurrency={selectedCurrency} showDivider />
+            <SearchItem
+                key={coin.uuid}
+                {...coin}
+                selectedCurrency={selectedCurrency}
+                showDivider
+            />
         ));
     }
 
@@ -88,7 +93,13 @@ export function SearchInput({
                     <Divider />
                     <Modal.Body className="bg-secondary" p={0}>
                         <ScrollArea
-                            h={300}
+                            h={
+                                !searchResult ||
+                                    !searchResult.length ||
+                                    !debouncedQuery.trim().length
+                                    ? "auto"
+                                    : 300
+                            }
                             className={`${classes.searchResults} bg-secondary`}
                             p="md"
                         >
@@ -118,7 +129,8 @@ function ErrorElement() {
 function EmptyElement({ totalCoins }: { totalCoins: number | undefined }) {
     return (
         <Text c="dimmed" ta="center" fw={600}>
-            Search in <NumberFormatter value={totalCoins} thousandSeparator /> Cryptocurrencies
+            Search in <NumberFormatter value={totalCoins} thousandSeparator />{" "}
+            Cryptocurrencies
         </Text>
     );
 }

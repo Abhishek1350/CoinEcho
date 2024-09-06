@@ -1,4 +1,11 @@
-import { Group, Avatar, Text, Skeleton, Divider } from "@mantine/core";
+import {
+    Group,
+    Avatar,
+    Text,
+    Skeleton,
+    Divider,
+    NumberFormatter,
+} from "@mantine/core";
 import { ListsCoin } from "@/lib/types";
 import { Link } from "react-router-dom";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
@@ -21,6 +28,18 @@ export function SearchItem({
     showDivider = false,
     selectedCurrency,
 }: SearchItemProps) {
+    const priceItem =
+        Number(price) < 1 ? (
+            `${selectedCurrency.sign}${formatCompactCurrency(price)}`
+        ) : (
+            <NumberFormatter
+                value={price}
+                thousandSeparator
+                decimalScale={Number(price) < 100 ? 2 : 0}
+                prefix={selectedCurrency.sign}
+            />
+        );
+
     return (
         <>
             <Link
@@ -39,23 +58,20 @@ export function SearchItem({
                             </Text>
                         </Group>
                         <Text size="sm" fw={500}>
-                            {selectedCurrency.sign}
-                            {formatCompactCurrency(Number(price))}
+                            {priceItem}
                         </Text>
                     </div>
 
-                    <div className={classes.searchItemPrice}>
-                        <Group>
-                            <Text c={Number(change) > 0 ? "teal" : "red"} fz="sm" fw={500}>
-                                <span>{change}%</span>
-                                {Number(change) > 0 ? (
-                                    <IconArrowUpRight size="1rem" stroke={1.5} />
-                                ) : (
-                                    <IconArrowDownRight size="1rem" stroke={1.5} />
-                                )}
-                            </Text>
-                        </Group>
-                    </div>
+                    <Group>
+                        <Text c={Number(change) > 0 ? "teal" : "red"} fz="sm" fw={500}>
+                            <span>{change}%</span>
+                            {Number(change) > 0 ? (
+                                <IconArrowUpRight size="1rem" stroke={1.5} />
+                            ) : (
+                                <IconArrowDownRight size="1rem" stroke={1.5} />
+                            )}
+                        </Text>
+                    </Group>
                 </Group>
             </Link>
             {showDivider && <Divider />}

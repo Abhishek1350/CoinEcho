@@ -8,7 +8,7 @@ import {
 } from "@mantine/core";
 import classes from "./Home.module.css";
 import { SearchInput, GlobalStatItem, CoinsTable } from "@/components";
-import { useGlobalStats } from "@/lib/useApi";
+import { useGlobalStats, useAllCoins } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
 
@@ -18,6 +18,11 @@ export function HomePage() {
   const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(
     { referenceCurrencyUuid: selectedCurrency.uuid }
   );
+
+  const { data: coins, isLoading } = useAllCoins({
+    referenceCurrencyUuid: selectedCurrency.uuid,
+    limit: 20,
+  });
 
   const { totalCoins, totalMarketCap, total24hVolume, btcDominance } =
     globalStats?.data || {};
@@ -54,7 +59,7 @@ export function HomePage() {
       ) : (
         <Skeleton h={20} mt={7} />
       ),
-      progress: 70,
+      progress: btcDominance ? btcDominance : 50,
       color: "orange",
     },
   ];
@@ -69,7 +74,15 @@ export function HomePage() {
           </Text>{" "}
           <br />
         </Title>
-        <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="sm">
+        <Text
+          c="dimmed"
+          ta="center"
+          size="lg"
+          maw={580}
+          mx="auto"
+          mt="sm"
+          fw={600}
+        >
           CoinEcho is now tracking{" "}
           {isLoadingGlobalStats ? (
             "..."
@@ -90,7 +103,11 @@ export function HomePage() {
           ))}
         </SimpleGrid>
         <SearchInput totalCoins={totalCoins} />
-        <CoinsTable/>
+        <CoinsTable
+          coins={coins?.data.coins}
+          isLoading={isLoading}
+          selectedCurrency={selectedCurrency}
+        />
       </Container>
     </section>
   );
