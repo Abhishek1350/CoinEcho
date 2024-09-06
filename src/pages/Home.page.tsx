@@ -7,7 +7,7 @@ import {
   Skeleton,
 } from "@mantine/core";
 import classes from "./Home.module.css";
-import { SearchInput, GlobalStatItem } from "@/components";
+import { SearchInput, GlobalStatItem, CoinsTable } from "@/components";
 import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
@@ -62,7 +62,6 @@ export function HomePage() {
   return (
     <section className={classes.section}>
       <Container size="lg">
-      <Skeleton h={100} mt={7} />
         <Title className={classes.title} ta="center">
           Explore the{" "}
           <Text inherit className={classes.highlight} component="span">
@@ -91,6 +90,7 @@ export function HomePage() {
           ))}
         </SimpleGrid>
         <SearchInput totalCoins={totalCoins} />
+        <CoinsTable/>
       </Container>
     </section>
   );
