@@ -24,11 +24,11 @@ export function CoinsTable({
     coins,
     isLoading,
     selectedCurrency,
-    selectedTimeline
+    selectedTimeline,
 }: CoinsTableProps) {
     const navigate = useNavigate();
     const { colorScheme } = useMantineColorScheme();
-    selectedTimeline = selectedTimeline.toUpperCase()
+    selectedTimeline = selectedTimeline.toUpperCase();
 
     function handleCoinClick(coin: ListsCoin) {
         navigate(`/coin/${coin.uuid}`);
@@ -128,7 +128,7 @@ export function CoinsTable({
 }
 
 function TableBodyLoader() {
-    return Array.from({ length: 10 }).map((_, i) => (
+    return Array.from({ length: 20 }).map((_, i) => (
         <Table.Tr key={i}>
             <Table.Td>
                 <Skeleton h={20} w={20} />
