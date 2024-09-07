@@ -29,7 +29,10 @@ export function CoinsContainer({
     const [selectedTimeline, setSelectedTimeline] = useState<string>("3h");
     const [searchParams] = useSearchParams();
 
-    const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>();
+    const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
+        duration: 500,
+        offset: 20,
+    });
 
     const currentPage = searchParams.get("page")
         ? Number(searchParams.get("page"))
@@ -48,7 +51,7 @@ export function CoinsContainer({
 
     return (
         <Container size="lg" p={0}>
-            <Flex mb="sm" justify="space-between" ref={targetRef} pt={20}>
+            <Flex mb="sm" justify="space-between" ref={targetRef}>
                 <Group gap={8} align="end">
                     <Title order={2}>Crypto prices</Title>
                     <Text c="dimmed" size="sm">

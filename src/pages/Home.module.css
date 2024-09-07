@@ -34,6 +34,7 @@
         position: static;
         height: 100%;
         overflow: hidden;
+        margin-top: var(--mantine-spacing-lg);
       }
     }
   }

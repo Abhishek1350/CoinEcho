@@ -106,7 +106,6 @@ export function HomePage() {
           maw={800}
           mx="auto"
           mt="xl"
-          mb="lg"
         >
           {globalStatsMapping.map((stat) => (
             <GlobalStatItem
@@ -119,7 +118,7 @@ export function HomePage() {
           ))}
         </SimpleGrid>
 
-        <Grid className={classes.coinsListWrapper}>
+        <Grid className={classes.coinsListWrapper} mt="xl">
           <Grid.Col span={{ base: 12, md: 9 }} className={classes.list}>
             <CoinsContainer
               selectedCurrency={selectedCurrency}
@@ -129,7 +128,7 @@ export function HomePage() {
 
           <Grid.Col
             span={{ base: 12, md: 3 }}
-            pt={25}
+            pt={6}
             pl="lg"
             className={classes.sidebar}
           >
