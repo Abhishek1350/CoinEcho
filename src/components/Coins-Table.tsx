@@ -9,7 +9,7 @@ import {
     useMantineColorScheme,
 } from "@mantine/core";
 import { CurrencyFilter, ListsCoin } from "@/lib/types";
-import { formatCompactCurrency } from "@/lib/utils";
+import { formatCompactCurrency, shortName } from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
@@ -66,13 +66,12 @@ export function CoinsTable({
                 onClick={() => handleCoinClick(coin)}
                 style={{ cursor: "pointer" }}
             >
-                <Table.Td>{coin?.rank}</Table.Td>
                 <Table.Td>
                     <Group gap="sm">
                         <Avatar size={40} src={coin?.iconUrl} radius={26} />
                         <div>
                             <Text size="sm" fw={600}>
-                                {coin?.name}
+                                {shortName(coin?.name)}
                             </Text>
                             <Text size="sm" c="dimmed" fw={600}>
                                 {coin?.symbol}
@@ -113,7 +112,6 @@ export function CoinsTable({
             >
                 <Table.Thead>
                     <Table.Tr>
-                        <Table.Th>Rank</Table.Th>
                         <Table.Th>Name</Table.Th>
                         <Table.Th>Price</Table.Th>
                         <Table.Th>Change ({selectedTimeline})</Table.Th>
@@ -131,19 +129,16 @@ function TableBodyLoader() {
     return Array.from({ length: 20 }).map((_, i) => (
         <Table.Tr key={i}>
             <Table.Td>
-                <Skeleton h={20} w={20} />
-            </Table.Td>
-            <Table.Td>
                 <Group gap="sm">
                     <Skeleton h={40} w={40} circle />
                     <div>
-                        <Skeleton h={15} w={200} />
+                        <Skeleton h={15} w={160} />
                         <Skeleton h={15} w={50} mt={5} />
                     </div>
                 </Group>
             </Table.Td>
             <Table.Td>
-                <Skeleton h={20} w={150} />
+                <Skeleton h={20} w={100} />
             </Table.Td>
             <Table.Td>
                 <Skeleton h={20} w={50} />

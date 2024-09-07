@@ -38,3 +38,17 @@ export const formatCompactCurrency = (value: number | string | undefined) => {
             : compactValue.replace("T", " Trillion");
     return fullValue;
 };
+
+/**
+ * Gets a shortened version of the given name, by taking the first 3 words of the name
+ * and joining them with a space.
+ *
+ * @param {string} name - The name to shorten.
+ * @returns {string} The shortened name.
+ */
+export function shortName(name: string): string {
+    if (!name) return "";
+    const words = name.split(" ");
+    const shortName = words.slice(0, 3).join(" ");
+    return shortName;
+}

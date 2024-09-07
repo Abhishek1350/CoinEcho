@@ -22,6 +22,12 @@
   color: light-dark(#1e2025, #fff9f9);
 }
 
+.hover{
+  @mixin hover {
+    background-color: light-dark(var(--mantine-color-gray-1), #1e2025);
+  }
+}
+
 input,
 textarea,
 select {

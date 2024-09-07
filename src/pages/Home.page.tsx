@@ -6,9 +6,18 @@ import {
   NumberFormatter,
   Skeleton,
   Box,
+  Grid,
+  Stack,
+  Divider,
 } from "@mantine/core";
 import classes from "./Home.module.css";
-import { SearchInput, GlobalStatItem, CoinsContainer } from "@/components";
+import {
+  SearchInput,
+  GlobalStatItem,
+  CoinsContainer,
+  StatsCoin,
+  StatsCoinLoader,
+} from "@/components";
 import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
@@ -110,10 +119,55 @@ export function HomePage() {
           ))}
         </SimpleGrid>
 
-        <CoinsContainer
-          selectedCurrency={selectedCurrency}
-          totalCoins={totalCoins}
-        />
+        <Grid className={classes.coinsListWrapper}>
+          <Grid.Col span={{ base: 12, md: 9 }} className={classes.list}>
+            <CoinsContainer
+              selectedCurrency={selectedCurrency}
+              totalCoins={totalCoins}
+            />
+          </Grid.Col>
+
+          <Grid.Col
+            span={{ base: 12, md: 3 }}
+            pt={25}
+            pl="lg"
+            className={classes.sidebar}
+          >
+            <Stack gap="lg">
+              <Box>
+                <Title order={4} mb="md">
+                  New on CoinEcho
+                </Title>
+                <Stack align="flex-start" justify="center" gap="sm">
+                  {isLoadingGlobalStats
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                      <StatsCoinLoader key={i} />
+                    ))
+                    : globalStats?.data?.newestCoins?.map((coin) => (
+                      <StatsCoin key={coin.uuid} {...coin} />
+                    ))}
+                </Stack>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Title order={4} mb="md">
+                  Tredning on CoinEcho
+                </Title>
+                <Stack align="flex-start" justify="center" gap="sm">
+                  {isLoadingGlobalStats
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                      <StatsCoinLoader key={i} />
+                    ))
+                    : globalStats?.data?.bestCoins?.map((coin) => (
+                      <StatsCoin key={coin.uuid} {...coin} />
+                    ))}
+                </Stack>
+              </Box>
+            </Stack>
+          </Grid.Col>
+        </Grid>
       </Container>
     </section>
   );

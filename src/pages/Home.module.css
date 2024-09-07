@@ -17,4 +17,24 @@
       font-size: rem(40px);
     }
   }
+
+  .coinsListWrapper {
+    .sidebar {
+      position: sticky;
+      height: 600px;
+      top: 0;
+      overflow: scroll;
+      padding: 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      @media (max-width: $mantine-breakpoint-md) {
+        position: static;
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+  }
 }
