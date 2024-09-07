@@ -17,15 +17,18 @@ interface CoinsTableProps {
     coins: ListsCoin[] | undefined;
     isLoading: boolean;
     selectedCurrency: CurrencyFilter;
+    selectedTimeline: string;
 }
 
 export function CoinsTable({
     coins,
     isLoading,
     selectedCurrency,
+    selectedTimeline
 }: CoinsTableProps) {
     const navigate = useNavigate();
     const { colorScheme } = useMantineColorScheme();
+    selectedTimeline = selectedTimeline.toUpperCase()
 
     function handleCoinClick(coin: ListsCoin) {
         navigate(`/coin/${coin.uuid}`);
@@ -101,7 +104,7 @@ export function CoinsTable({
     });
 
     return (
-        <ScrollArea mt="xl">
+        <ScrollArea>
             <Table
                 miw={800}
                 verticalSpacing="sm"
@@ -113,7 +116,7 @@ export function CoinsTable({
                         <Table.Th>Rank</Table.Th>
                         <Table.Th>Name</Table.Th>
                         <Table.Th>Price</Table.Th>
-                        <Table.Th>Change</Table.Th>
+                        <Table.Th>Change ({selectedTimeline})</Table.Th>
                         <Table.Th>Market Cap</Table.Th>
                         <Table.Th>Volume (24h)</Table.Th>
                     </Table.Tr>

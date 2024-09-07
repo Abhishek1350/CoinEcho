@@ -7,8 +7,8 @@ import {
   Skeleton,
 } from "@mantine/core";
 import classes from "./Home.module.css";
-import { SearchInput, GlobalStatItem, CoinsTable } from "@/components";
-import { useGlobalStats, useAllCoins } from "@/lib/useApi";
+import { SearchInput, GlobalStatItem, CoinsContainer } from "@/components";
+import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
 
@@ -18,11 +18,6 @@ export function HomePage() {
   const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(
     { referenceCurrencyUuid: selectedCurrency.uuid }
   );
-
-  const { data: coins, isLoading } = useAllCoins({
-    referenceCurrencyUuid: selectedCurrency.uuid,
-    limit: 20,
-  });
 
   const { totalCoins, totalMarketCap, total24hVolume, btcDominance } =
     globalStats?.data || {};
@@ -103,11 +98,7 @@ export function HomePage() {
           ))}
         </SimpleGrid>
         <SearchInput totalCoins={totalCoins} />
-        <CoinsTable
-          coins={coins?.data.coins}
-          isLoading={isLoading}
-          selectedCurrency={selectedCurrency}
-        />
+        <CoinsContainer selectedCurrency={selectedCurrency} totalCoins={totalCoins} />
       </Container>
     </section>
   );

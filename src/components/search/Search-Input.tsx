@@ -130,7 +130,8 @@ function EmptyElement({ totalCoins }: { totalCoins: number | undefined }) {
     return (
         <Text c="dimmed" ta="center" fw={600}>
             Search in <NumberFormatter value={totalCoins} thousandSeparator />{" "}
-            Cryptocurrencies
+            Cryptocurrencies <br />
+            Based on last 24 hours
         </Text>
     );
 }
