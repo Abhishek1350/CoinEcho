@@ -5,6 +5,7 @@ import {
   SimpleGrid,
   NumberFormatter,
   Skeleton,
+  Box,
 } from "@mantine/core";
 import classes from "./Home.module.css";
 import { SearchInput, GlobalStatItem, CoinsContainer } from "@/components";
@@ -86,7 +87,7 @@ export function HomePage() {
           )}{" "}
           Cryptocurrencies
         </Text>
-        <SimpleGrid cols={{ base: 1, sm: 3 }} maw={800} mx="auto" my="xl">
+        <SimpleGrid cols={{ base: 1, sm: 3 }} maw={800} mx="auto" mt="xl">
           {globalStatsMapping.map((stat) => (
             <GlobalStatItem
               key={stat.label}
@@ -97,7 +98,9 @@ export function HomePage() {
             />
           ))}
         </SimpleGrid>
-        <SearchInput totalCoins={totalCoins} />
+        <Box mt="xl" mb="lg">
+          <SearchInput totalCoins={totalCoins} />
+        </Box>
         <CoinsContainer selectedCurrency={selectedCurrency} totalCoins={totalCoins} />
       </Container>
     </section>

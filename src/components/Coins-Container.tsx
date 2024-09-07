@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CurrencyFilter } from "@/lib/types";
 import { useAllCoins } from "@/lib/useApi";
-import { CoinsTable, Pagination } from "../";
+import { CoinsTable, Pagination } from ".";
 import {
     Flex,
     Group,
