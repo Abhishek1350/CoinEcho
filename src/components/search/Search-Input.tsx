@@ -59,7 +59,7 @@ export function SearchInput({
     }
 
     return (
-        <Container className={classes.wrapper} maw={500}>
+        <Container className={classes.wrapper} maw={500} p={0}>
             <Input
                 styles={{ input: { cursor: "pointer" } }}
                 placeholder="Search for an asset"

@@ -3,13 +3,13 @@ import { CurrencyFilter } from "@/lib/types";
 import { useAllCoins } from "@/lib/useApi";
 import { CoinsTable, Pagination } from ".";
 import {
+    Container,
     Flex,
     Group,
     Title,
     NumberFormatter,
     Text,
     Select,
-    Box,
 } from "@mantine/core";
 import { timelineFilters } from "@/config/filters";
 import { useSearchParams } from "react-router-dom";
@@ -26,7 +26,7 @@ export function CoinsContainer({
     selectedCurrency,
     totalCoins,
 }: CoinsContainerProps) {
-    const [selectedTimeline, setSelectedTimeline] = useState<string>("7d");
+    const [selectedTimeline, setSelectedTimeline] = useState<string>("3h");
     const [searchParams] = useSearchParams();
 
     const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>();
@@ -47,7 +47,7 @@ export function CoinsContainer({
     }
 
     return (
-        <Box>
+        <Container size="lg" p={0}>
             <Flex mb="sm" justify="space-between" ref={targetRef} pt={20}>
                 <Group gap={8} align="end">
                     <Title order={2}>Crypto prices</Title>
@@ -78,14 +78,14 @@ export function CoinsContainer({
                 selectedCurrency={selectedCurrency}
                 selectedTimeline={selectedTimeline}
             />
-            <Box mt={10}>
+            <Container mt={15} p={0}>
                 <Pagination
                     totalItems={totalCoins || 0}
                     currentPage={currentPage}
                     itemsPerPage={ITEMS_PER_PAGE}
                     onPageChange={() => scrollIntoView({ alignment: "start" })}
                 />
-            </Box>
-        </Box>
+            </Container>
+        </Container>
     );
 }

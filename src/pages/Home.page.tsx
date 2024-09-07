@@ -76,7 +76,7 @@ export function HomePage() {
           size="lg"
           maw={580}
           mx="auto"
-          mt="sm"
+          mt={5}
           fw={600}
         >
           CoinEcho is now tracking{" "}
@@ -87,7 +87,18 @@ export function HomePage() {
           )}{" "}
           Cryptocurrencies
         </Text>
-        <SimpleGrid cols={{ base: 1, sm: 3 }} maw={800} mx="auto" mt="xl">
+
+        <Box mt="lg">
+          <SearchInput totalCoins={totalCoins} />
+        </Box>
+
+        <SimpleGrid
+          cols={{ base: 1, sm: 3 }}
+          maw={800}
+          mx="auto"
+          mt="xl"
+          mb="lg"
+        >
           {globalStatsMapping.map((stat) => (
             <GlobalStatItem
               key={stat.label}
@@ -98,10 +109,11 @@ export function HomePage() {
             />
           ))}
         </SimpleGrid>
-        <Box mt="xl" mb="lg">
-          <SearchInput totalCoins={totalCoins} />
-        </Box>
-        <CoinsContainer selectedCurrency={selectedCurrency} totalCoins={totalCoins} />
+
+        <CoinsContainer
+          selectedCurrency={selectedCurrency}
+          totalCoins={totalCoins}
+        />
       </Container>
     </section>
   );
