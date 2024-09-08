@@ -39,16 +39,29 @@ export const formatCompactCurrency = (value: number | string | undefined) => {
     return fullValue;
 };
 
+
 /**
- * Gets a shortened version of the given name, by taking the first 3 words of the name
+ * Gets a shortened version of the given name, by taking the first n words of the name
  * and joining them with a space.
  *
  * @param {string} name - The name to shorten.
+ * @param {number} [length=2] - The number of words to include in the shortened name.
  * @returns {string} The shortened name.
  */
-export function shortName(name: string): string {
+export function shortName(name: string, length: number = 2): string {
     if (!name) return "";
     const words = name.split(" ");
-    const shortName = words.slice(0, 3).join(" ");
+    const shortName = words.slice(0, length).join(" ");
     return shortName;
+}
+
+/**
+ * Converts an array of strings to an array of numbers by using parseFloat
+ * on each string.
+ *
+ * @param {string[]} strings - The array of strings to convert.
+ * @returns {number[]} The resulting array of numbers.
+ */
+export function prepareSparklineData(strings: string[]): number[] {
+    return strings.map(parseFloat);
 }
