@@ -64,7 +64,9 @@ export function shortName(name: string, length: number = 2): string {
  * @returns {number[]} The resulting array of numbers.
  */
 export function prepareSparklineData(strings: string[]): number[] {
-    return strings.map(parseFloat);
+    // some values can be null so remove them
+    const filterdValues = strings.filter((value) => value !== null);
+    return filterdValues.map(parseFloat);
 }
 
 /**
