@@ -37,6 +37,7 @@ export const useAllCoins = (
         timePeriod?: string;
         limit?: number;
         offset?: number;
+        orderBy?: string;
     } = {}
 ) => {
     return useBaseQuery<CoinsResponse>(

@@ -161,7 +161,7 @@ function TableBodyLoader() {
                 <Skeleton h={20} w={80} />
             </Table.Td>
             <Table.Td>
-                <Skeleton h={20} w={150} />
+                <Skeleton h={20} w={120} />
             </Table.Td>
         </Table.Tr>
     ));

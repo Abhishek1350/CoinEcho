@@ -11,7 +11,7 @@ import {
     Text,
     Select,
 } from "@mantine/core";
-import { timelineFilters } from "@/config/filters";
+import { timelineFilters, sortingFilters } from "@/config/filters";
 import { useSearchParams } from "react-router-dom";
 import { useScrollIntoView } from "@mantine/hooks";
 
@@ -27,6 +27,9 @@ export function CoinsContainer({
     totalCoins,
 }: CoinsContainerProps) {
     const [selectedTimeline, setSelectedTimeline] = useState<string>("3h");
+
+    const [sortingFilter, setSortingFilter] = useState("Market Cap");
+
     const [searchParams] = useSearchParams();
 
     const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
@@ -43,37 +46,73 @@ export function CoinsContainer({
         limit: ITEMS_PER_PAGE,
         timePeriod: selectedTimeline,
         offset: (currentPage - 1) * ITEMS_PER_PAGE,
+        orderBy: prepareSortingforApi(sortingFilter),
     });
 
     function handleTimePeriodChange(timePeriod: any) {
         setSelectedTimeline(timePeriod);
     }
 
+    function handleSortingFilterChange(sortingFilter: string | null) {
+        if (!sortingFilter) return;
+        setSortingFilter(sortingFilter);
+    }
+
+    function prepareSortingforApi(currentFilter: string) {
+        return (
+            sortingFilters.find((filter) => filter.label === currentFilter)?.value ||
+            ""
+        );
+    }
+
     return (
         <Container size="lg" p={0}>
-            <Flex mb="sm" justify="space-between" ref={targetRef}>
+            <Flex
+                mb="sm"
+                justify="space-between"
+                gap="lg"
+                wrap="wrap"
+                ref={targetRef}
+            >
                 <Group gap={8} align="end">
                     <Title order={2}>Crypto prices</Title>
                     <Text c="dimmed" size="sm">
                         <NumberFormatter value={totalCoins} thousandSeparator /> Assets
                     </Text>
                 </Group>
-                <Select
-                    data={timelineFilters}
-                    value={selectedTimeline}
-                    onChange={handleTimePeriodChange}
-                    maw={80}
-                    size="sm"
-                    allowDeselect={false}
-                    checkIconPosition="right"
-                    maxDropdownHeight={400}
-                    classNames={{ dropdown: "bg-secondary" }}
-                    radius="xl"
-                    styles={{
-                        option: { textTransform: "uppercase", fontWeight: 600 },
-                        input: { textTransform: "uppercase", fontWeight: 600 },
-                    }}
-                />
+                <Group gap={8} align="end">
+                    <Select
+                        data={sortingFilters.map((filter) => filter.label)}
+                        value={sortingFilter}
+                        onChange={handleSortingFilterChange}
+                        size="sm"
+                        allowDeselect={false}
+                        checkIconPosition="right"
+                        maxDropdownHeight={400}
+                        classNames={{ dropdown: "bg-secondary" }}
+                        radius="xl"
+                        styles={{
+                            option: { fontWeight: 600 },
+                            input: { fontWeight: 600},
+                        }}
+                    />
+                    <Select
+                        data={timelineFilters}
+                        value={selectedTimeline}
+                        onChange={handleTimePeriodChange}
+                        maw={80}
+                        size="sm"
+                        allowDeselect={false}
+                        checkIconPosition="right"
+                        maxDropdownHeight={400}
+                        classNames={{ dropdown: "bg-secondary" }}
+                        radius="xl"
+                        styles={{
+                            option: { textTransform: "uppercase", fontWeight: 600 },
+                            input: { textTransform: "uppercase", fontWeight: 600 },
+                        }}
+                    />
+                </Group>
             </Flex>
             <CoinsTable
                 coins={coins?.data.coins}

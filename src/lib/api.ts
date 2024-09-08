@@ -49,6 +49,7 @@ class Api {
             timePeriod?: string;
             limit?: number;
             offset?: number;
+            orderBy?: string;
         } = {}
     ): Promise<CoinsResponse> {
         const url = buildUrlWithParams(`${cryptoApiBaseUrl}/coins`, params);

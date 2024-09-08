@@ -6,6 +6,11 @@ export interface CurrencyFilter {
     sign: string;
 }
 
+export interface SortingFilter {
+    label: string;
+    value: string;
+}
+
 export interface Link {
     name: string;
     url: string;

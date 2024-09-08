@@ -1,3 +1,5 @@
+import { ListsCoin } from "./types";
+
 /**
  * Builds a URL by appending the given query parameters to the given base URL.
  *
@@ -39,7 +41,6 @@ export const formatCompactCurrency = (value: number | string | undefined) => {
     return fullValue;
 };
 
-
 /**
  * Gets a shortened version of the given name, by taking the first n words of the name
  * and joining them with a space.
@@ -64,4 +65,36 @@ export function shortName(name: string, length: number = 2): string {
  */
 export function prepareSparklineData(strings: string[]): number[] {
     return strings.map(parseFloat);
+}
+
+/**
+ * Sorts the given array of coins by the given property name in ascending order.
+ * If the reversed flag is set, the array is reversed after sorting.
+ * If no property name is given, the array is returned as is.
+ *
+ * @param {null | "name"} by - The property name to sort by, or null to not sort.
+ * @param {boolean} reversed - Whether to reverse the sorted array.
+ * @param {ListsCoin[]} items - The array of coins to sort.
+ * @returns {ListsCoin[]} The sorted array of coins.
+ */
+export function sortCoins(
+    by: null | "name",
+    reversed: boolean,
+    items: ListsCoin[]
+): ListsCoin[] {
+    if (!items || !items.length) return items;
+
+    if (by) {
+        return items.sort((a: ListsCoin, b: ListsCoin) => {
+            if (a[by] < b[by]) return -1;
+            if (a[by] > b[by]) return 1;
+            return 0;
+        });
+    }
+
+    if (reversed) {
+        return items.reverse();
+    }
+
+    return items;
 }
