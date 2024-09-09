@@ -38,6 +38,7 @@ export const useAllCoins = (
         limit?: number;
         offset?: number;
         orderBy?: string;
+        orderDirection?: string;
     } = {}
 ) => {
     return useBaseQuery<CoinsResponse>(

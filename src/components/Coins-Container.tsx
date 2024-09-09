@@ -11,7 +11,11 @@ import {
     Text,
     Select,
 } from "@mantine/core";
-import { timelineFilters, sortingFilters } from "@/config/filters";
+import {
+    timelineFilters,
+    orderByFilters,
+    orderDirectionFilters,
+} from "@/config/filters";
 import { useSearchParams } from "react-router-dom";
 import { useScrollIntoView } from "@mantine/hooks";
 
@@ -26,9 +30,12 @@ export function CoinsContainer({
     selectedCurrency,
     totalCoins,
 }: CoinsContainerProps) {
-    const [selectedTimeline, setSelectedTimeline] = useState<string>("3h");
+    const [selectedTimeline, setSelectedTimeline] = useState("3h");
 
-    const [sortingFilter, setSortingFilter] = useState("Market Cap");
+    const [orderBy, setOrderBy] = useState("Market Cap");
+    const [orderDirection, setOrderDirection] = useState(
+        orderDirectionFilters[0].label
+    );
 
     const [searchParams] = useSearchParams();
 
@@ -46,21 +53,38 @@ export function CoinsContainer({
         limit: ITEMS_PER_PAGE,
         timePeriod: selectedTimeline,
         offset: (currentPage - 1) * ITEMS_PER_PAGE,
-        orderBy: prepareSortingforApi(sortingFilter),
+        orderBy: prepareSortingforApi(orderBy),
+        orderDirection: prepareSortingforApi(orderDirection, "orderDirection"),
     });
 
-    function handleTimePeriodChange(timePeriod: any) {
+    function handleTimePeriodChange(timePeriod: string | null) {
+        if (!timePeriod) return;
         setSelectedTimeline(timePeriod);
     }
 
-    function handleSortingFilterChange(sortingFilter: string | null) {
+    function handleOrderByChange(sortingFilter: string | null) {
         if (!sortingFilter) return;
-        setSortingFilter(sortingFilter);
+        setOrderBy(sortingFilter);
     }
 
-    function prepareSortingforApi(currentFilter: string) {
+    function handleOrderDirectionChange(orderBy: string | null) {
+        if (!orderBy) return;
+        setOrderDirection(orderBy);
+    }
+
+    function prepareSortingforApi(
+        currentFilter: string,
+        type: "orderBy" | "orderDirection" = "orderBy"
+    ) {
+        if (type === "orderDirection") {
+            return (
+                orderDirectionFilters.find((filter) => filter.label === currentFilter)
+                    ?.value || ""
+            );
+        }
+
         return (
-            sortingFilters.find((filter) => filter.label === currentFilter)?.value ||
+            orderByFilters.find((filter) => filter.label === currentFilter)?.value ||
             ""
         );
     }
@@ -80,11 +104,12 @@ export function CoinsContainer({
                         <NumberFormatter value={totalCoins} thousandSeparator /> Assets
                     </Text>
                 </Group>
-                <Group gap={8} align="end">
+                <Group gap={10} align="end">
                     <Select
-                        data={sortingFilters.map((filter) => filter.label)}
-                        value={sortingFilter}
-                        onChange={handleSortingFilterChange}
+                        data={orderByFilters.map((filter) => filter.label)}
+                        value={orderBy}
+                        onChange={handleOrderByChange}
+                        maw={150}
                         size="sm"
                         allowDeselect={false}
                         checkIconPosition="right"
@@ -93,7 +118,23 @@ export function CoinsContainer({
                         radius="xl"
                         styles={{
                             option: { fontWeight: 600 },
-                            input: { fontWeight: 600},
+                            input: { fontWeight: 600 },
+                        }}
+                    />
+                    <Select
+                        data={orderDirectionFilters.map((filter) => filter.label)}
+                        value={orderDirection}
+                        onChange={handleOrderDirectionChange}
+                        maw={120}
+                        size="sm"
+                        allowDeselect={false}
+                        checkIconPosition="right"
+                        maxDropdownHeight={400}
+                        classNames={{ dropdown: "bg-secondary" }}
+                        radius="xl"
+                        styles={{
+                            option: { fontWeight: 600 },
+                            input: { fontWeight: 600 },
                         }}
                     />
                     <Select

@@ -82,12 +82,17 @@ export const timelineFilters = [
     "5y",
 ];
 
-export const sortingFilters = [
+export const orderByFilters = [
     { label: "Price", value: "price" },
     { label: "Change", value: "change" },
     { label: "Market Cap", value: "marketCap" },
     { label: "Volume (24h)", value: "24hVolume" },
     { label: "Listed At", value: "listedAt" },
+];
+
+export const orderDirectionFilters = [
+    { label: "High - Low", value: "desc" },
+    { label: "Low - High", value: "asc" },
 ];
 
 export const newsProviderFilters = [
