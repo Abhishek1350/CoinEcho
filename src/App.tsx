@@ -3,7 +3,7 @@ import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
-import { Header } from "./components";
+import { Header, PageLoader } from "./components";
 import { CurrencyProvider } from "@/context/Currency-Context.tsx";
 
 const LazyHomePage = lazy(() => import("./pages/Home.page"));
@@ -14,7 +14,7 @@ interface LazyPageProps {
 
 function LazyPage({ Component }: LazyPageProps) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<PageLoader />}>
       <Component />
     </Suspense>
   );
