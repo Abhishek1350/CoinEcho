@@ -1,17 +1,11 @@
-import {
-    Group,
-    Avatar,
-    Text,
-    Skeleton,
-    Divider,
-    NumberFormatter,
-} from "@mantine/core";
+import { Group, Text, Skeleton, Divider, NumberFormatter } from "@mantine/core";
 import { ListsCoin } from "@/lib/types";
 import { Link } from "react-router-dom";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import classes from "./Search.module.css";
 import { formatCompactCurrency } from "@/lib/utils";
 import { CurrencyFilter } from "@/lib/types";
+import { LazyImage } from "../Lazy-Image";
 
 interface SearchItemProps extends ListsCoin {
     showDivider?: boolean;
@@ -47,7 +41,7 @@ export function SearchItem({
                 className={`${classes.searchItem} text-secondary`}
             >
                 <Group>
-                    <Avatar src={iconUrl} />
+                    <LazyImage src={iconUrl} width={40} alt={name} />
                     <div className={classes.searchItemDetails}>
                         <Group gap={5}>
                             <Text size="sm" fw={500}>

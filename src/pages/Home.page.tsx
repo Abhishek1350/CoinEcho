@@ -22,7 +22,7 @@ import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
 
-export function HomePage() {
+export default function HomePage() {
   const { selectedCurrency } = useCurrency();
 
   const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(

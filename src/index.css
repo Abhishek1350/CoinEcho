@@ -22,7 +22,11 @@
   color: light-dark(#1e2025, #fff9f9);
 }
 
-.hover{
+.rounded {
+  border-radius: 50%;
+}
+
+.hover {
   @mixin hover {
     background-color: light-dark(var(--mantine-color-gray-1), #1e2025);
   }

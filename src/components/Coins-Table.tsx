@@ -2,7 +2,6 @@ import {
     Table,
     ScrollArea,
     Group,
-    Avatar,
     Text,
     Skeleton,
     NumberFormatter,
@@ -16,7 +15,7 @@ import {
 } from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import { SmallChart } from "./";
+import { SmallChart, LazyImage } from "./";
 
 interface CoinsTableProps {
     coins: ListsCoin[] | undefined;
@@ -73,7 +72,11 @@ export function CoinsTable({
             >
                 <Table.Td>
                     <Group gap="sm">
-                        <Avatar size={40} src={coin?.iconUrl} radius={26} />
+                        <LazyImage
+                            src={coin?.iconUrl}
+                            width={40}
+                            alt={coin.name}
+                        />
                         <div>
                             <Text size="sm" fw={600}>
                                 {shortName(coin?.name)}

@@ -1,6 +1,7 @@
 import { StatsCoin as IStatsCoin } from "@/lib/types";
-import { Avatar, Group, Text, Skeleton } from "@mantine/core";
+import { Group, Text, Skeleton } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { LazyImage } from "./Lazy-Image";
 
 export function StatsCoin({ uuid, name, symbol, iconUrl }: IStatsCoin) {
     return (
@@ -16,7 +17,7 @@ export function StatsCoin({ uuid, name, symbol, iconUrl }: IStatsCoin) {
             className="hover"
         >
             <Group>
-                <Avatar size={40} src={iconUrl} radius={26} />
+                <LazyImage src={iconUrl} width={40} alt={name} />
                 <div>
                     <Text fw={600}>{name}</Text>
                     <Text fw={600} size="xs" c="dimmed">

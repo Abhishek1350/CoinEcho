@@ -1,6 +1,7 @@
-import { Menu, Avatar, UnstyledButton, Group, Text } from "@mantine/core";
+import { Menu, UnstyledButton, Group, Text } from "@mantine/core";
 import { CurrencyFilters } from "@/config/filters";
 import { useCurrency } from "@/context/Currency-Context";
+import { LazyImage } from "./Lazy-Image";
 
 export function CurrencyFilter() {
   const { selectedCurrency, handleCurrencyChange } = useCurrency();
@@ -14,7 +15,11 @@ export function CurrencyFilter() {
       <Menu.Target>
         <UnstyledButton miw={70}>
           <Group gap={8}>
-            <Avatar src={selectedCurrency.iconUrl} size="sm" />
+            <LazyImage
+              src={selectedCurrency.iconUrl}
+              width={26}
+              alt={selectedCurrency.name}
+            />
             <Text>{selectedCurrency.symbol}</Text>
           </Group>
         </UnstyledButton>
@@ -27,7 +32,11 @@ export function CurrencyFilter() {
           >
             <UnstyledButton component="div">
               <Group gap={10}>
-                <Avatar src={filter.iconUrl} />
+                <LazyImage
+                  src={filter.iconUrl}
+                  width={40}
+                  alt={filter.name}
+                />
                 <div style={{ flex: 1 }}>
                   <Text size="sm" fw={500}>
                     {`${filter.sign} - ${filter.symbol}`}
