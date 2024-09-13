@@ -121,7 +121,7 @@ export function CoinsTable({
                 miw={800}
                 verticalSpacing="sm"
                 highlightOnHover
-                highlightOnHoverColor={colorScheme === "light" ? "" : "#1e2025"}
+                highlightOnHoverColor={colorScheme === "light" ? "#f1eeee" : "#1e2025"}
             >
                 <Table.Thead>
                     <Table.Tr>
