@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CurrencyFilter } from "@/lib/types";
 import { useAllCoins } from "@/lib/useApi";
 import { CoinsTable, Pagination } from ".";
@@ -16,8 +15,8 @@ import {
     orderByFilters,
     orderDirectionFilters,
 } from "@/config/filters";
-import { useSearchParams } from "react-router-dom";
 import { useScrollIntoView } from "@mantine/hooks";
+import { useFilters } from "@/hooks/useFilters";
 
 interface CoinsContainerProps {
     selectedCurrency: CurrencyFilter;
@@ -30,47 +29,22 @@ export function CoinsContainer({
     selectedCurrency,
     totalCoins,
 }: CoinsContainerProps) {
-    const [selectedTimeline, setSelectedTimeline] = useState("3h");
-
-    const [orderBy, setOrderBy] = useState("Market Cap");
-    const [orderDirection, setOrderDirection] = useState(
-        orderDirectionFilters[0].label
-    );
-
-    const [searchParams] = useSearchParams();
+    const { timeline, orderBy, orderDirection, handleFilterChange, currentPage } =
+        useFilters();
 
     const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
         duration: 500,
         offset: 20,
     });
 
-    const currentPage = searchParams.get("page")
-        ? Number(searchParams.get("page"))
-        : 1;
-
     const { data: coins, isLoading } = useAllCoins({
         referenceCurrencyUuid: selectedCurrency.uuid,
         limit: ITEMS_PER_PAGE,
-        timePeriod: selectedTimeline,
+        timePeriod: timeline,
         offset: (currentPage - 1) * ITEMS_PER_PAGE,
         orderBy: prepareSortingforApi(orderBy),
         orderDirection: prepareSortingforApi(orderDirection, "orderDirection"),
     });
-
-    function handleTimePeriodChange(timePeriod: string | null) {
-        if (!timePeriod) return;
-        setSelectedTimeline(timePeriod);
-    }
-
-    function handleOrderByChange(sortingFilter: string | null) {
-        if (!sortingFilter) return;
-        setOrderBy(sortingFilter);
-    }
-
-    function handleOrderDirectionChange(orderBy: string | null) {
-        if (!orderBy) return;
-        setOrderDirection(orderBy);
-    }
 
     function prepareSortingforApi(
         currentFilter: string,
@@ -108,7 +82,7 @@ export function CoinsContainer({
                     <Select
                         data={orderByFilters.map((filter) => filter.label)}
                         value={orderBy}
-                        onChange={handleOrderByChange}
+                        onChange={(value) => handleFilterChange("orderBy", value!)}
                         maw={150}
                         size="sm"
                         allowDeselect={false}
@@ -124,7 +98,7 @@ export function CoinsContainer({
                     <Select
                         data={orderDirectionFilters.map((filter) => filter.label)}
                         value={orderDirection}
-                        onChange={handleOrderDirectionChange}
+                        onChange={(value) => handleFilterChange("orderDirection", value!)}
                         maw={120}
                         size="sm"
                         allowDeselect={false}
@@ -139,8 +113,8 @@ export function CoinsContainer({
                     />
                     <Select
                         data={timelineFilters}
-                        value={selectedTimeline}
-                        onChange={handleTimePeriodChange}
+                        value={timeline}
+                        onChange={(value) => handleFilterChange("timeline", value!)}
                         maw={80}
                         size="sm"
                         allowDeselect={false}
@@ -159,7 +133,7 @@ export function CoinsContainer({
                 coins={coins?.data.coins}
                 isLoading={isLoading}
                 selectedCurrency={selectedCurrency}
-                selectedTimeline={selectedTimeline}
+                selectedTimeline={timeline}
             />
             <Container mt={15} p={0}>
                 <Pagination

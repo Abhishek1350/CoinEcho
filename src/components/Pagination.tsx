@@ -1,6 +1,6 @@
 import { Pagination as MantinePagination } from "@mantine/core";
 import { usePagination } from "@mantine/hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface PaginationProps {
     totalItems: number;
@@ -13,7 +13,7 @@ export function Pagination({
     totalItems,
     itemsPerPage = 20,
     currentPage = 1,
-    onPageChange
+    onPageChange,
 }: PaginationProps) {
     const navigate = useNavigate();
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -22,8 +22,12 @@ export function Pagination({
         initialPage: currentPage,
     });
 
+    const [searchParams] = useSearchParams();
+
     function handlePageChange(page: number) {
-        navigate(`?page=${page}`);
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+        newSearchParams.set("page", page.toString());
+        navigate(`?${newSearchParams.toString()}`);
         onPageChange && onPageChange();
         pagination.setPage(page);
     }
