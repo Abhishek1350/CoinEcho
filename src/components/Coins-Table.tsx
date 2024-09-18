@@ -35,7 +35,7 @@ export function CoinsTable({
     selectedTimeline = selectedTimeline.toUpperCase();
 
     function handleCoinClick(coin: ListsCoin) {
-        navigate(`/coin/${coin.uuid}`);
+        navigate(`/coin-details?uuid=${coin.uuid}`);
     }
 
     const rows = coins?.map((coin) => {

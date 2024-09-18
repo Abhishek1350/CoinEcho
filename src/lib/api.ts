@@ -73,7 +73,7 @@ class Api {
             timePeriod?: string;
         } = {}
     ): Promise<CoinDetailsResponse> {
-        const url = buildUrlWithParams(`${cryptoApiBaseUrl}/${coinId}`, params);
+        const url = buildUrlWithParams(`${cryptoApiBaseUrl}/coin/${coinId}`, params);
         return this.fetchJson<CoinDetailsResponse>(url, "coins");
     }
 

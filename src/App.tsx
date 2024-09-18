@@ -7,6 +7,7 @@ import { Header, PageLoader } from "./components";
 import { CurrencyProvider } from "@/context/Currency-Context.tsx";
 
 const LazyHomePage = lazy(() => import("./pages/home"));
+const CoinDetailsPage = lazy(() => import("./pages/coin-details"));
 
 interface LazyPageProps {
   Component: ComponentType;
@@ -28,6 +29,7 @@ export default function App() {
         <main>
           <Routes>
             <Route path="/" element={<LazyPage Component={LazyHomePage} />} />
+            <Route path="/coin-details" element={<LazyPage Component={CoinDetailsPage} />} />
           </Routes>
         </main>
       </MantineProvider>

@@ -102,3 +102,5 @@ export const newsProviderFilters = [
     "decrypt",
     "theguardian",
 ];
+
+export const coinDetailsTimelineFilters = ["24h", "7d", "30d"];

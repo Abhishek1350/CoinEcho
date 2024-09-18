@@ -37,7 +37,7 @@ export function SearchItem({
     return (
         <>
             <Link
-                to={`/coin/${uuid}`}
+                to={`/coin-details?uuid=${uuid}`}
                 className={`${classes.searchItem} text-secondary`}
             >
                 <Group>

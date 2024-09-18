@@ -1,0 +1,20 @@
+.section {
+  padding: calc(var(--mantine-spacing-lg) * 2) 0;
+  .title {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    font-size: rem(50px);
+    font-weight: 900;
+    letter-spacing: rem(-2px);
+
+    .highlight {
+      color: light-dark(
+        var(--mantine-color-blue-7),
+        var(--mantine-color-blue-6)
+      );
+    }
+
+    @media (max-width: $mantine-breakpoint-xs) {
+      font-size: rem(40px);
+    }
+  }
+}
