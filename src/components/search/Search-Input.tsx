@@ -18,8 +18,10 @@ import { useCurrency } from "@/context/Currency-Context";
 
 export function SearchInput({
     totalCoins,
+    size = "lg"
 }: {
     totalCoins: number | undefined;
+    size?:"sm" | "md" | "lg"
 }) {
     const [query, setQuery] = useState("");
     const [opened, { open, close }] = useDisclosure(false);
@@ -65,10 +67,9 @@ export function SearchInput({
                 placeholder="Search for an asset"
                 radius="xl"
                 mx="auto"
-                size="lg"
+                size={size}
                 readOnly
                 rightSectionPointerEvents="all"
-                mt="md"
                 onClick={open}
                 leftSection={<IconSearch size={16} />}
             />

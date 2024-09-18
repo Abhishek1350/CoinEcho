@@ -27,6 +27,10 @@ body {
   color: light-dark(#1e2025, #fff9f9);
 }
 
+a{
+  text-decoration: none;
+}
+
 .rounded {
   border-radius: 50%;
 }
