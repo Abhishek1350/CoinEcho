@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import { Header, PageLoader } from "./components";
 import { CurrencyProvider } from "@/context/Currency-Context.tsx";
 
-const LazyHomePage = lazy(() => import("./pages/Home.page"));
+const LazyHomePage = lazy(() => import("./pages/home"));
 
 interface LazyPageProps {
   Component: ComponentType;

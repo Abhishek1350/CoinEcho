@@ -10,7 +10,7 @@ import {
   Stack,
   Divider,
 } from "@mantine/core";
-import classes from "./Home.module.css";
+import classes from "./styles.module.css";
 import {
   SearchInput,
   GlobalStatItem,
