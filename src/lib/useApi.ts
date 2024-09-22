@@ -18,6 +18,7 @@ function useBaseQuery<T>(
         queryKey,
         queryFn,
         refetchInterval,
+        retry: 1,
     });
 }
 

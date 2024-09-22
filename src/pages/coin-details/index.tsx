@@ -1,4 +1,12 @@
-import { Container, Title, Box, Group, SegmentedControl } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Text,
+  Box,
+  Group,
+  SegmentedControl,
+  NumberFormatter,
+} from "@mantine/core";
 import classes from "./styles.module.css";
 import { useSearchParams, Navigate, Link } from "react-router-dom";
 import { useCurrency } from "@/context/Currency-Context";
@@ -12,6 +20,8 @@ import {
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
 import PageSkeleton from "./Page-Skeleton";
+import { formatCompactCurrency } from "@/lib/utils";
+import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 
 export default function CoinDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -22,14 +32,17 @@ export default function CoinDetailsPage() {
 
   const [isLiked, setIsLiked] = useState(false);
 
-  if (!coin_uuid) {
-    Navigate({ to: "/", replace: true });
-    return null;
-  }
-
   const { selectedCurrency } = useCurrency();
 
-  const { data: details, isLoading } = useCoinDetails(coin_uuid, {
+  if (!coin_uuid) {
+    return <Navigate to="/" replace />;
+  }
+
+  const {
+    data: details,
+    isLoading,
+    isError,
+  } = useCoinDetails(coin_uuid, {
     referenceCurrencyUuid: selectedCurrency.uuid,
     timePeriod: selectedTimeline,
   });
@@ -43,6 +56,35 @@ export default function CoinDetailsPage() {
   if (isLoading || isLoadingGlobalStats) {
     return <PageSkeleton />;
   }
+
+  if (isError) {
+    return <Navigate to="/" replace />;
+  }
+
+  const priceItem =
+    Number(coin?.price) < 1 ? (
+      `${selectedCurrency.sign}${formatCompactCurrency(coin?.price)}`
+    ) : (
+      <NumberFormatter
+        value={coin?.price}
+        thousandSeparator
+        decimalScale={Number(coin?.price) < 100 ? 2 : 0}
+        prefix={selectedCurrency.sign}
+      />
+    );
+
+  const PriceChange = () => (
+    <Group>
+      <Text c={Number(coin?.change) > 0 ? "teal" : "red"} fz="md" fw={500}>
+        <span>{coin?.change}%</span>
+        {Number(coin?.change) > 0 ? (
+          <IconArrowUpRight size="1rem" stroke={1.5} />
+        ) : (
+          <IconArrowDownRight size="1rem" stroke={1.5} />
+        )}
+      </Text>
+    </Group>
+  );
 
   return (
     <section className={classes.section}>
@@ -89,7 +131,21 @@ export default function CoinDetailsPage() {
         </Box>
 
         <Box className={classes.content} mt={50}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis repudiandae, quidem corporis quibusdam porro reprehenderit iusto rerum, doloribus maxime adipisci culpa quod. Repellat quod molestias, natus eaque aperiam ducimus obcaecati!
+          <Box className={classes.head}>
+            <Text c="dimmed" size="lg" fw={500}>
+              {coin?.symbol} Price
+            </Text>
+            <Group gap={5}>
+              <Title fw={700} order={2}>
+                {priceItem}
+              </Title>
+              <PriceChange />
+            </Group>
+          </Box>
+
+          <Box className={classes.chart}>
+
+          </Box>
         </Box>
       </Container>
     </section>
