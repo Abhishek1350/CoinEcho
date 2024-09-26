@@ -6,7 +6,7 @@ import { LazyImage } from "./Lazy-Image";
 export function StatsCoin({ uuid, name, symbol, iconUrl }: IStatsCoin) {
     return (
         <Link
-            to={`/coin/${uuid}`}
+            to={`/coin-details/${uuid}`}
             style={{
                 textDecoration: "none",
                 color: "inherit",
