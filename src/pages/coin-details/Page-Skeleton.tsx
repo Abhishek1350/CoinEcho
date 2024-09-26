@@ -24,7 +24,17 @@ export default function PageSkeleton() {
                 </Box>
 
                 <Box className={classes.content} mt={50}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis repudiandae, quidem corporis quibusdam porro reprehenderit iusto rerum, doloribus maxime adipisci culpa quod. Repellat quod molestias, natus eaque aperiam ducimus obcaecati!
+                    <Box className={classes.head}>
+                        <Skeleton height={20} width={80} />
+                        <Group gap={5} mt={10}>
+                            <Skeleton height={30} width={150} />
+                            <Skeleton height={20} width={50} />
+                        </Group>
+                    </Box>
+
+                    <Box className={classes.chart} mt={40}>
+                        <Skeleton height={400} />
+                    </Box>
                 </Box>
             </Container>
         </section>

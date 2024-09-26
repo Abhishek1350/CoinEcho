@@ -16,11 +16,12 @@ import {
   SearchInput,
   WishlistButton,
   ShareButton,
+  BigChart
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
 import PageSkeleton from "./Page-Skeleton";
-import { formatCompactCurrency } from "@/lib/utils";
+import { formatCompactCurrency, prepareSparklineData } from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 
 export default function CoinDetailsPage() {
@@ -143,8 +144,11 @@ export default function CoinDetailsPage() {
             </Group>
           </Box>
 
-          <Box className={classes.chart}>
-
+          <Box className={classes.chart} mt={40}>
+            <BigChart
+              data={prepareSparklineData(coin?.sparkline!)}
+              duration={selectedTimeline as "24h" | "7d" | "30d"}
+            />
           </Box>
         </Box>
       </Container>
