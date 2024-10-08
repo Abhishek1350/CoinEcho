@@ -15,12 +15,15 @@ import classes from "./Header.module.css";
 import { Link } from "react-router-dom";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Logo, CurrencyFilter } from "../";
+import { useFilters } from "@/hooks/useFilters";
 
 export function Header() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
 
     const { colorScheme, setColorScheme } = useMantineColorScheme();
+
+    const { handleResetFilters } = useFilters();
 
     function toggleTheme() {
         if (colorScheme === "light") {
@@ -36,7 +39,7 @@ export function Header() {
             <header className={classes.header}>
                 <Container size="lg" className={classes.container}>
                     <Group justify="space-between" h="100%">
-                        <Logo />
+                        <Logo onClick={handleResetFilters} />
                         <Group h="100%" gap={0} visibleFrom="sm">
                             <Link to="/" className={classes.link}>
                                 Home

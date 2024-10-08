@@ -1,6 +1,11 @@
 import { Text } from "@mantine/core";
 import { Link } from "react-router-dom";
-export function Logo({ size }: { size?: number }) {
+
+interface Props{
+    size?: number
+    onClick?: () => void
+}
+export function Logo({ size, onClick }: Props) {
     return (
         <Text
             fw={900}
@@ -14,6 +19,7 @@ export function Logo({ size }: { size?: number }) {
                     color:
                         "light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-6))",
                 }}
+                onClick={onClick}
                 to="/"
             >
                 CoinEcho

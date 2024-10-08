@@ -70,9 +70,13 @@ export function useFilters() {
         };
     }
 
+    function handleResetFilters() {
+        dispatch({ type: "reset" });
+    }
+
     const currentPage = Number(searchParams.get("page")) || 1;
 
     const { timeline, orderBy, orderDirection } = state;
 
-    return { currentPage, handleFilterChange, timeline, orderBy, orderDirection };
+    return { currentPage, handleFilterChange, timeline, orderBy, orderDirection, handleResetFilters };
 }

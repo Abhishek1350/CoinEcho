@@ -21,9 +21,12 @@ import {
 import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
+import { useSearchParams } from "react-router-dom";
 
 export default function HomePage() {
   const { selectedCurrency } = useCurrency();
+
+  const [searchParams] = useSearchParams();
 
   const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(
     { referenceCurrencyUuid: selectedCurrency.uuid }
@@ -123,6 +126,7 @@ export default function HomePage() {
             <CoinsContainer
               selectedCurrency={selectedCurrency}
               totalCoins={totalCoins}
+              key={searchParams.toString()}
             />
           </Grid.Col>
 

@@ -1,6 +1,6 @@
 import { CurrencyFilter } from "@/lib/types";
 import { useAllCoins } from "@/lib/useApi";
-import { CoinsTable, Pagination } from ".";
+import { CoinsTable, Pagination, FilterItem } from ".";
 import {
     Container,
     Flex,
@@ -8,15 +8,16 @@ import {
     Title,
     NumberFormatter,
     Text,
-    Select,
 } from "@mantine/core";
+import { useScrollIntoView } from "@mantine/hooks";
+import { useFilters } from "@/hooks/useFilters";
 import {
     timelineFilters,
     orderByFilters,
     orderDirectionFilters,
 } from "@/config/filters";
-import { useScrollIntoView } from "@mantine/hooks";
-import { useFilters } from "@/hooks/useFilters";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface CoinsContainerProps {
     selectedCurrency: CurrencyFilter;
@@ -36,6 +37,10 @@ export function CoinsContainer({
         duration: 500,
         offset: 20,
     });
+
+    const [searchParams] = useSearchParams();
+
+    const currentPageInQuery = searchParams.get("page");
 
     const { data: coins, isLoading } = useAllCoins({
         referenceCurrencyUuid: selectedCurrency.uuid,
@@ -63,6 +68,11 @@ export function CoinsContainer({
         );
     }
 
+    useEffect(() => {
+        if (!currentPageInQuery) return;
+        scrollIntoView({ alignment: "start" });
+    }, [currentPage]);
+
     return (
         <Container size="lg" p={0}>
             <Flex
@@ -79,49 +89,30 @@ export function CoinsContainer({
                     </Text>
                 </Group>
                 <Group gap={10} align="end">
-                    <Select
-                        data={orderByFilters.map((filter) => filter.label)}
+                    <FilterItem
                         value={orderBy}
+                        data={orderByFilters.map((filter) => filter.label)}
                         onChange={(value) => handleFilterChange("orderBy", value!)}
-                        maw={150}
-                        size="sm"
-                        allowDeselect={false}
-                        checkIconPosition="right"
-                        maxDropdownHeight={400}
-                        classNames={{ dropdown: "bg-secondary" }}
-                        radius="xl"
                         styles={{
                             option: { fontWeight: 600 },
                             input: { fontWeight: 600 },
                         }}
                     />
-                    <Select
+                    <FilterItem
                         data={orderDirectionFilters.map((filter) => filter.label)}
                         value={orderDirection}
                         onChange={(value) => handleFilterChange("orderDirection", value!)}
-                        maw={120}
-                        size="sm"
-                        allowDeselect={false}
-                        checkIconPosition="right"
-                        maxDropdownHeight={400}
-                        classNames={{ dropdown: "bg-secondary" }}
-                        radius="xl"
+                        maxWidth={120}
                         styles={{
                             option: { fontWeight: 600 },
                             input: { fontWeight: 600 },
                         }}
                     />
-                    <Select
+                    <FilterItem
                         data={timelineFilters}
                         value={timeline}
                         onChange={(value) => handleFilterChange("timeline", value!)}
-                        maw={80}
-                        size="sm"
-                        allowDeselect={false}
-                        checkIconPosition="right"
-                        maxDropdownHeight={400}
-                        classNames={{ dropdown: "bg-secondary" }}
-                        radius="xl"
+                        maxWidth={80}
                         styles={{
                             option: { textTransform: "uppercase", fontWeight: 600 },
                             input: { textTransform: "uppercase", fontWeight: 600 },
@@ -140,7 +131,6 @@ export function CoinsContainer({
                     totalItems={totalCoins || 0}
                     currentPage={currentPage}
                     itemsPerPage={ITEMS_PER_PAGE}
-                    onPageChange={() => scrollIntoView({ alignment: "start" })}
                 />
             </Container>
         </Container>
