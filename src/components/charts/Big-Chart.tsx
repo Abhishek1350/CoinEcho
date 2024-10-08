@@ -8,6 +8,9 @@ import {
     CartesianGrid,
     ReferenceLine,
 } from "recharts";
+import { formatCompactCurrency } from "@/lib/utils";
+import { useCurrency } from "@/context/Currency-Context";
+import { NumberFormatter } from "@mantine/core";
 
 interface SmallChartProps {
     data: number[];
@@ -42,12 +45,26 @@ const generateXAxisTicks = (
 export function BigChart({ data, duration }: SmallChartProps) {
     const xAxisTicks = generateXAxisTicks(duration, data.length);
 
+    const { selectedCurrency } = useCurrency();
+
     const chartDataPoints = data.map((price, index) => ({
         price,
         timestamp: xAxisTicks[index],
     }));
 
     const lineColor = data[data.length - 1] >= data[0] ? "#4caf50" : "#ff4c4c";
+
+    const getPrice = (price: number) =>
+        price < 1 ? (
+            `${selectedCurrency.sign}${formatCompactCurrency(price)}`
+        ) : (
+            <NumberFormatter
+                value={price}
+                thousandSeparator
+                decimalScale={price < 100 ? 2 : 0}
+                prefix={selectedCurrency.sign}
+            />
+        );
 
     return (
         <ResponsiveContainer width="100%" height={400}>
@@ -74,7 +91,7 @@ export function BigChart({ data, duration }: SmallChartProps) {
                     tick={{ fontSize: 12, fill: "#a5a5a5" }}
                 />
                 <Tooltip
-                    formatter={(value: number) => [`$${value.toFixed(2)}`, "Price"]}
+                    formatter={(value: number) => [getPrice(value), "Price"]}
                     labelFormatter={(label: string) => `Time: ${label}`}
                     contentStyle={{ backgroundColor: "#fff", border: "1px solid #ccc" }}
                     labelStyle={{

@@ -159,13 +159,13 @@ export default function CoinDetailsPage() {
               <Title fw={700} order={2}>
                 {
                   Number(coin?.allTimeHigh?.price) < 1 ? (
-                    `${selectedCurrency.sign}${formatCompactCurrency(coin?.allTimeHigh?.price)}`
+                    `$${formatCompactCurrency(coin?.allTimeHigh?.price)}`
                   ) : (
                     <NumberFormatter
                       value={coin?.allTimeHigh?.price}
                       thousandSeparator
                       decimalScale={Number(coin?.allTimeHigh?.price) < 100 ? 2 : 0}
-                      prefix={selectedCurrency.sign}
+                      prefix="$"
                     />
                   )
                 }
