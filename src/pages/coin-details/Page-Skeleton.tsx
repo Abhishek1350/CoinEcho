@@ -24,13 +24,22 @@ export default function PageSkeleton() {
                 </Box>
 
                 <Box className={classes.content} mt={50}>
-                    <Box className={classes.head}>
-                        <Skeleton height={20} width={80} />
-                        <Group gap={5} mt={10}>
+                    <Group justify="space-between">
+                        <Box>
+                            <Skeleton height={20} width={80} />
+                            <Group gap={5} mt={10}>
+                                <Skeleton height={30} width={150} />
+                                <Skeleton height={20} width={50} />
+                            </Group>
+                        </Box>
+                        <Box>
+                            <Group gap={5} mb={10}>
+                                <Skeleton height={30} width={70} />
+                                <Skeleton height={20} width={200} />
+                            </Group>
                             <Skeleton height={30} width={150} />
-                            <Skeleton height={20} width={50} />
-                        </Group>
-                    </Box>
+                        </Box>
+                    </Group>
 
                     <Box className={classes.chart} mt={40}>
                         <Skeleton height={400} />

@@ -16,12 +16,16 @@ import {
   SearchInput,
   WishlistButton,
   ShareButton,
-  BigChart
+  BigChart,
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
 import PageSkeleton from "./Page-Skeleton";
-import { formatCompactCurrency, prepareSparklineData } from "@/lib/utils";
+import {
+  formatCompactCurrency,
+  getReadableDateTime,
+  prepareSparklineData,
+} from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 
 export default function CoinDetailsPage() {
@@ -132,17 +136,42 @@ export default function CoinDetailsPage() {
         </Box>
 
         <Box className={classes.content} mt={50}>
-          <Box className={classes.head}>
-            <Text c="dimmed" size="lg" fw={500}>
-              {coin?.symbol} Price
-            </Text>
-            <Group gap={5}>
+          <Group justify="space-between">
+            <Box>
+              <Text c="dimmed" size="lg" fw={500}>
+                {coin?.symbol} Price
+              </Text>
+              <Group gap={5}>
+                <Title fw={700} order={2}>
+                  {priceItem}
+                </Title>
+                <PriceChange />
+              </Group>
+            </Box>
+
+            <Box>
+              <Text c="dimmed" size="lg" fw={500}>
+                Highest{" "}
+                <Text component="span">
+                  ({getReadableDateTime(coin?.allTimeHigh?.timestamp)})
+                </Text>
+              </Text>
               <Title fw={700} order={2}>
-                {priceItem}
+                {
+                  Number(coin?.allTimeHigh?.price) < 1 ? (
+                    `${selectedCurrency.sign}${formatCompactCurrency(coin?.allTimeHigh?.price)}`
+                  ) : (
+                    <NumberFormatter
+                      value={coin?.allTimeHigh?.price}
+                      thousandSeparator
+                      decimalScale={Number(coin?.allTimeHigh?.price) < 100 ? 2 : 0}
+                      prefix={selectedCurrency.sign}
+                    />
+                  )
+                }
               </Title>
-              <PriceChange />
-            </Group>
-          </Box>
+            </Box>
+          </Group>
 
           <Box className={classes.chart} mt={40}>
             <BigChart
@@ -150,8 +179,68 @@ export default function CoinDetailsPage() {
               duration={selectedTimeline as "24h" | "7d" | "30d"}
             />
           </Box>
+
+          <Box mt={50} size="lg">
+            <Title fw={800} order={2} mb={5}>
+              More About {coin?.name} {coin?.symbol}
+            </Title>
+            <Text mb={20} size="lg">
+              {coin?.description}
+            </Text>
+            <StatsGroup
+              fMCap={coin?.fullyDilutedMarketCap}
+              mCap={coin?.marketCap}
+              volume={coin?.["24hVolume"]}
+              selectedCurrency={selectedCurrency.sign}
+            />
+          </Box>
         </Box>
       </Container>
     </section>
   );
+}
+
+function StatsGroup({
+  selectedCurrency,
+  volume = "",
+  mCap = "",
+  fMCap = "",
+}: {
+  selectedCurrency: string;
+  volume: string | undefined;
+  mCap: string | undefined;
+  fMCap: string | undefined;
+}) {
+  const data = [
+    {
+      title: "24 Hours Volume",
+      stats: volume,
+    },
+    {
+      title: "Market Cap",
+      stats: mCap,
+    },
+    {
+      title: "Fully Diluted Market Cap",
+      stats: fMCap,
+    },
+  ];
+
+  const stats = data.map((stat) => (
+    <div key={stat.title} className={classes.stat}>
+      <Text className={classes.count} fw={700}>
+        <NumberFormatter
+          value={stat.stats}
+          thousandSeparator
+          decimalScale={Number(stat.stats) < 100 ? 2 : 0}
+          prefix={selectedCurrency}
+        />
+      </Text>
+      <Text className={classes.title} fw={700}>
+        {stat.title}
+      </Text>
+    </div>
+  ));
+
+  return <div className={classes.StatGroup}>{stats}</div>;
 }

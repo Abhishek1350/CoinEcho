@@ -100,3 +100,9 @@ export function sortCoins(
 
     return items;
 }
+
+export function getReadableDateTime(timestamp: number | undefined): string {
+    if (!timestamp) return "";
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+}
