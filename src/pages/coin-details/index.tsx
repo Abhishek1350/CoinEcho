@@ -6,6 +6,9 @@ import {
   Group,
   SegmentedControl,
   NumberFormatter,
+  Card,
+  Progress,
+  Grid,
 } from "@mantine/core";
 import classes from "./styles.module.css";
 import { useSearchParams, Navigate, Link } from "react-router-dom";
@@ -27,6 +30,7 @@ import {
   prepareSparklineData,
 } from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
+import { Supply } from "@/lib/types";
 
 export default function CoinDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -157,18 +161,18 @@ export default function CoinDetailsPage() {
                 </Text>
               </Text>
               <Title fw={700} order={2}>
-                {
-                  Number(coin?.allTimeHigh?.price) < 1 ? (
-                    `$${formatCompactCurrency(coin?.allTimeHigh?.price)}`
-                  ) : (
-                    <NumberFormatter
-                      value={coin?.allTimeHigh?.price}
-                      thousandSeparator
-                      decimalScale={Number(coin?.allTimeHigh?.price) < 100 ? 2 : 0}
-                      prefix="$"
-                    />
-                  )
-                }
+                {Number(coin?.allTimeHigh?.price) < 1 ? (
+                  `$${formatCompactCurrency(coin?.allTimeHigh?.price)}`
+                ) : (
+                  <NumberFormatter
+                    value={coin?.allTimeHigh?.price}
+                    thousandSeparator
+                    decimalScale={
+                      Number(coin?.allTimeHigh?.price) < 100 ? 2 : 0
+                    }
+                    prefix="$"
+                  />
+                )}
               </Title>
             </Box>
           </Group>
@@ -180,13 +184,22 @@ export default function CoinDetailsPage() {
             />
           </Box>
 
-          <Box mt={50} size="lg">
-            <Title fw={800} order={2} mb={5}>
-              More About {coin?.name} {coin?.symbol}
-            </Title>
-            <Text mb={20} size="lg">
-              {coin?.description}
-            </Text>
+          <Box mt={50}>
+            <Grid mb={50}>
+              <Grid.Col span={{ md: 7, lg: 6 }}>
+                <Title fw={800} order={2} mb={5}>
+                  More About {coin?.name} {coin?.symbol}
+                </Title>
+                <Text mb={20} size="lg">
+                  {coin?.description}
+                </Text>
+              </Grid.Col>
+              {coin?.supply && (
+                <Grid.Col span={{ md: 5, lg: 6 }}>
+                  <SupplyCard data={coin?.supply} />
+                </Grid.Col>
+              )}
+            </Grid>
             <StatsGroup
               fMCap={coin?.fullyDilutedMarketCap}
               mCap={coin?.marketCap}
@@ -243,4 +256,20 @@ function StatsGroup({
   ));
 
   return <div className={classes.StatGroup}>{stats}</div>;
+}
+
+function SupplyCard({ data }: { data: Supply }) {
+  if (!data) return null;
+  const percentage = (Number(data?.circulating) / Number(data?.max)) * 100;
+  return (
+    <Card withBorder radius="md" padding="xl" bg="var(--mantine-color-body)">
+      <Text fz="md" tt="uppercase" fw={700} c="dimmed">
+        Supply
+      </Text>
+      <Text fz="lg" fw={600}>
+        {data?.circulating} / {data?.max}
+      </Text>
+      <Progress value={percentage} mt="md" size="lg" radius="xl" />
+    </Card>
+  );
 }
