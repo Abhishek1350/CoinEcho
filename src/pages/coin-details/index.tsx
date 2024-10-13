@@ -119,7 +119,7 @@ export default function CoinDetailsPage() {
             </Link>
 
             <Group justify="center">
-              <ShareButton />
+              <ShareButton title={coin?.name} text={coin?.description} />
               <WishlistButton
                 isLiked={isLiked}
                 onClick={() => setIsLiked(!isLiked)}
