@@ -13,6 +13,7 @@
     "@mantine/charts": "^7.12.2",
     "@mantine/core": "^7.12.1",
     "@mantine/hooks": "^7.12.1",
+    "@supabase/supabase-js": "^2.45.4",
     "@tabler/icons-react": "^3.14.0",
     "@tanstack/react-query": "^5.52.2",
     "framer-motion": "^11.3.30",

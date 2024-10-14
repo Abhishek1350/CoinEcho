@@ -267,7 +267,7 @@ function SupplyCard({ data }: { data: Supply }) {
         Supply
       </Text>
       <Text fz="lg" fw={600}>
-        {data?.circulating} / {data?.max}
+        {data?.circulating} / {data?.max ?? "∞"} 
       </Text>
       <Progress value={percentage} mt="md" size="lg" radius="xl" />
     </Card>

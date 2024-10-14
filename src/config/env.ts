@@ -22,6 +22,16 @@ export const cryptoApiBaseUrl = assertValue(
     import.meta.env.VITE_RAPID_API_KEY,
     'Missing environment variable: VITE_RAPID_API_KEY'
   )
+
+  export const supabaseUrl = assertValue(
+    import.meta.env.VITE_SUPABASE_URL,
+    'Missing environment variable: VITE_SUPABASE_URL'
+  )
+
+  export const supabaseAnonKey = assertValue(
+    import.meta.env.VITE_SUPABASE_ANON_KEY,
+    'Missing environment variable: VITE_SUPABASE_ANON_KEY'
+  )
   
   
   /**
