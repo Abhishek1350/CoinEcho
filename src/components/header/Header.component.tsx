@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Logo, CurrencyFilter } from "../";
 import { useFilters } from "@/hooks/useFilters";
+import { useAuthModal } from "@/context";
+import { AuthForm } from "@/components";
 
 export function Header() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -24,6 +26,8 @@ export function Header() {
     const { colorScheme, setColorScheme } = useMantineColorScheme();
 
     const { handleResetFilters } = useFilters();
+
+    const { handleOpen } = useAuthModal();
 
     function toggleTheme() {
         if (colorScheme === "light") {
@@ -62,7 +66,7 @@ export function Header() {
                                 )}
                             </ActionIcon>
                             <CurrencyFilter />
-                            <Button>Log In</Button>
+                            <Button onClick={handleOpen}>Log In</Button>
                         </Group>
                         <Burger
                             opened={drawerOpened}
@@ -115,10 +119,12 @@ export function Header() {
                             )}
                         </ActionIcon>
                         <CurrencyFilter />
-                        <Button>Log In</Button>
+                        <Button onClick={handleOpen}>Log In</Button>
                     </Group>
                 </ScrollArea>
             </Drawer>
+
+            <AuthForm/>
         </>
     );
 }

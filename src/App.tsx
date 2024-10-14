@@ -4,7 +4,7 @@ import "@mantine/charts/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
 import { Header, PageLoader } from "./components";
-import { CurrencyProvider } from "@/context/Currency-Context.tsx";
+import { CurrencyProvider, AuthModalProvider } from "@/context";
 
 const LazyHomePage = lazy(() => import("./pages/home"));
 const CoinDetailsPage = lazy(() => import("./pages/coin-details"));
@@ -24,17 +24,25 @@ function LazyPage({ Component }: LazyPageProps) {
 
 export default function App() {
   return (
-    <CurrencyProvider>
-      <MantineProvider defaultColorScheme="auto">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<LazyPage Component={LazyHomePage} />} />
-            <Route path="/coin-details" element={<LazyPage Component={CoinDetailsPage} />} />
-            <Route path="/latest-news" element={<LazyPage Component={NewsPage} />} />
-          </Routes>
-        </main>
-      </MantineProvider>
-    </CurrencyProvider>
+    <AuthModalProvider>
+      <CurrencyProvider>
+        <MantineProvider defaultColorScheme="auto">
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<LazyPage Component={LazyHomePage} />} />
+              <Route
+                path="/coin-details"
+                element={<LazyPage Component={CoinDetailsPage} />}
+              />
+              <Route
+                path="/latest-news"
+                element={<LazyPage Component={NewsPage} />}
+              />
+            </Routes>
+          </main>
+        </MantineProvider>
+      </CurrencyProvider>
+    </AuthModalProvider>
   );
 }
