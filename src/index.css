@@ -35,6 +35,11 @@ a{
   border-radius: 50%;
 }
 
+.video-aspect {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
 .hover {
   @mixin hover {
     background-color: light-dark(var(--mantine-color-gray-1), #1e2025);

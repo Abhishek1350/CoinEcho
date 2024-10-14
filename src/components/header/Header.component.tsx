@@ -44,7 +44,7 @@ export function Header() {
                             <Link to="/" className={classes.link}>
                                 Home
                             </Link>
-                            <Link to="/crypto-news" className={classes.link}>
+                            <Link to="/latest-news" className={classes.link}>
                                 Crypto News
                             </Link>
                         </Group>
