@@ -28,7 +28,7 @@ export function AuthModalProvider({ children }: AuthModalContextProps) {
 export function useAuthModal() {
     const context = useContext(AuthModalContext);
     if (!context) {
-        throw new Error("useCurrency must be used within a CurrencyProvider");
+        throw new Error("AuthModalContext must be used within a CurrencyProvider");
     }
     return context;
 }

@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Logo, CurrencyFilter } from "../";
 import { useFilters } from "@/hooks/useFilters";
-import { useAuthModal } from "@/context";
+import { useAuthModal, useAuth } from "@/context";
 import { AuthForm } from "@/components";
 
 export function Header() {
@@ -29,6 +29,8 @@ export function Header() {
 
     const { handleOpen } = useAuthModal();
 
+    const { user, handleSignOut } = useAuth();
+
     function toggleTheme() {
         if (colorScheme === "light") {
             setColorScheme("dark");
@@ -36,6 +38,18 @@ export function Header() {
             setColorScheme("light");
         }
         if (drawerOpened) closeDrawer();
+    }
+
+    function renderAuthButton() {
+        if (user) {
+            return (
+                <Button variant="outline" color="red" onClick={handleSignOut}>
+                    Log Out
+                </Button>
+            );
+        } else {
+            return <Button onClick={handleOpen}>Log In</Button>;
+        }
     }
 
     return (
@@ -66,7 +80,7 @@ export function Header() {
                                 )}
                             </ActionIcon>
                             <CurrencyFilter />
-                            <Button onClick={handleOpen}>Log In</Button>
+                            {renderAuthButton()}
                         </Group>
                         <Burger
                             opened={drawerOpened}
@@ -119,12 +133,12 @@ export function Header() {
                             )}
                         </ActionIcon>
                         <CurrencyFilter />
-                        <Button onClick={handleOpen}>Log In</Button>
+                        {renderAuthButton()}
                     </Group>
                 </ScrollArea>
             </Drawer>
 
-            <AuthForm/>
+            <AuthForm />
         </>
     );
 }

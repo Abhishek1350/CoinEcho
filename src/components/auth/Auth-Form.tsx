@@ -11,6 +11,8 @@ import {
 } from "@mantine/core";
 import { AuthModal } from "./Auth-Modal";
 import { useAuthModal } from "@/context";
+import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 
 const initialFormValues = {
     email: "",
@@ -22,6 +24,7 @@ const initialFormValues = {
 
 export function AuthForm() {
     const [type, toggle] = useToggle(["login", "register"]);
+    const [loading, setLoading] = useState(false);
 
     const { isOpen, handleClose } = useAuthModal();
 
@@ -47,17 +50,66 @@ export function AuthForm() {
                     name: (val) =>
                         val.length < 3 ? "Please enter a valid name" : null,
 
-                    isAgree: (val) =>
-                        val ? null : "Please be ready to sign up",
+                    isAgree: (val) => (val ? null : "Please be ready to sign up"),
                 }
                 : {
                     email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
                 },
     });
 
+    async function handleSignup() {
+        try {
+            setLoading(true);
+            if (loading) return;
+            const { error, data } = await supabase.auth.signUp({
+                email: form.values.email,
+                password: form.values.password,
+            });
+
+            if (!!error || !data?.user || !data?.user?.id)
+                throw new Error("Something went wrong");
+
+            await supabase.from("users").insert({
+                id: data.user?.id,
+                name: form.values.name,
+                email: form.values.email,
+            });
+
+            handleCloseModal();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleLogin() {
+        try {
+            setLoading(true);
+            if (loading) return;
+            const { error, data } = await supabase.auth.signInWithPassword({
+                email: form.values.email,
+                password: form.values.password,
+            });
+
+            if (!!error || !data?.user || !data?.user?.id)
+                throw new Error("Something went wrong");
+
+            handleCloseModal();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <AuthModal isOpen={isOpen} handleClose={handleCloseModal}>
-            <form onSubmit={form.onSubmit(() => { })}>
+            <form
+                onSubmit={form.onSubmit(() => {
+                    type === "login" ? handleLogin() : handleSignup();
+                })}
+            >
                 <Stack>
                     {type === "register" && (
                         <TextInput
@@ -122,10 +174,7 @@ export function AuthForm() {
                                 onChange={(event) =>
                                     form.setFieldValue("isAgree", event.currentTarget.checked)
                                 }
-                                error={
-                                    form.errors.isAgree &&
-                                    "Please be ready to sign up"
-                                }
+                                error={form.errors.isAgree && "Please be ready to sign up"}
                             />
                         </>
                     )}
@@ -143,7 +192,14 @@ export function AuthForm() {
                             ? "Already have an account? Login"
                             : "Don't have an account? Register"}
                     </Anchor>
-                    <Button type="submit">{upperFirst(type)}</Button>
+                    <Button
+                        loading={loading}
+                        disabled={loading}
+                        type="submit"
+                        variant="outline"
+                    >
+                        {upperFirst(type)}
+                    </Button>
                 </Group>
             </form>
         </AuthModal>
