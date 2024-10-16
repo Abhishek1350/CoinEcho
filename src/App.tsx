@@ -3,7 +3,7 @@ import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { Routes, Route } from "react-router-dom";
-import { Header, PageLoader } from "./components";
+import { Header, PageLoader, ScrollToTop } from "./components";
 import { CurrencyProvider, AuthModalProvider, AuthProvider } from "@/context";
 
 const LazyHomePage = lazy(() => import("./pages/home"));
@@ -23,6 +23,7 @@ function LazyPage({ Component }: LazyPageProps) {
 }
 
 export default function App() {
+  console.log("run")
   return (
     <AuthProvider>
       <AuthModalProvider>
@@ -45,6 +46,7 @@ export default function App() {
                 />
               </Routes>
             </main>
+            <ScrollToTop/>
           </MantineProvider>
         </CurrencyProvider>
       </AuthModalProvider>
