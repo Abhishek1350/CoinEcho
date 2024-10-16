@@ -17,7 +17,7 @@ import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Logo, CurrencyFilter } from "../";
 import { useFilters } from "@/hooks/useFilters";
 import { useAuthModal, useAuth } from "@/context";
-import { AuthForm } from "@/components";
+import { AuthForm, ProfileMenuToggle } from "@/components";
 
 export function Header() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -43,9 +43,7 @@ export function Header() {
     function renderAuthButton() {
         if (user) {
             return (
-                <Button variant="outline" color="red" onClick={handleSignOut}>
-                    Log Out
-                </Button>
+                <ProfileMenuToggle {...user} handleSignOut={handleSignOut} />
             );
         } else {
             return <Button onClick={handleOpen}>Log In</Button>;

@@ -7,16 +7,10 @@ import {
     useCallback,
 } from "react";
 import { supabase } from "@/lib/supabase";
+import { User } from "@/lib/types";
 
 interface AuthContextProps {
     children: ReactNode;
-}
-
-interface User {
-    uuid: string;
-    name: string;
-    email: string;
-    profile_pic: string | null;
 }
 
 interface AuthContextData {

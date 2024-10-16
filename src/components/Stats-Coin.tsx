@@ -2,6 +2,7 @@ import { StatsCoin as IStatsCoin } from "@/lib/types";
 import { Group, Text, Skeleton } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { LazyImage } from "./Lazy-Image";
+import { shortName } from "@/lib/utils";
 
 export function StatsCoin({ uuid, name, symbol, iconUrl }: IStatsCoin) {
     return (
@@ -19,7 +20,7 @@ export function StatsCoin({ uuid, name, symbol, iconUrl }: IStatsCoin) {
             <Group>
                 <LazyImage src={iconUrl} width={40} alt={name} />
                 <div>
-                    <Text fw={600}>{name}</Text>
+                    <Text fw={600}>{shortName(name)}</Text>
                     <Text fw={600} size="xs" c="dimmed">
                         {symbol}
                     </Text>

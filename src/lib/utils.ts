@@ -53,6 +53,9 @@ export function shortName(name: string, length: number = 2): string {
     if (!name) return "";
     const words = name.split(" ");
     const shortName = words.slice(0, length).join(" ");
+    if (shortName.length > 20) {
+        return shortName.slice(0, 10) + "...";
+    }
     return shortName;
 }
 
@@ -110,20 +113,20 @@ export function getReadableDateTime(timestamp: number | undefined): string {
 export function getTimeAgo(dateString: string): string {
     const date = new Date(dateString);
 
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const dayOfWeek = daysOfWeek[date.getUTCDay()];
-    
-    const dayNumber = date.getUTCDate().toString().padStart(2, '0');
-    const month = date.toLocaleString('default', { month: 'short' });
+
+    const dayNumber = date.getUTCDate().toString().padStart(2, "0");
+    const month = date.toLocaleString("default", { month: "short" });
     const year = date.getUTCFullYear();
-    
+
     let hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
-    
+
     return `${dayOfWeek}, ${dayNumber} ${month} ${year} ${hours}:${minutes} ${ampm}`;
 }
 

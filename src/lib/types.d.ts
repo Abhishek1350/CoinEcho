@@ -114,3 +114,10 @@ export interface News {
 export interface NewsResponse {
     data: News[];
 }
+
+export interface User {
+    uuid: string;
+    name: string;
+    email: string;
+    profile_pic: string | null;
+}
