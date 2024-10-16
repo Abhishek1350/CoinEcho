@@ -40,11 +40,14 @@ export function Header() {
         if (drawerOpened) closeDrawer();
     }
 
+    async function handleLogOut() {
+        await handleSignOut();
+        if (drawerOpened) closeDrawer();
+    }
+
     function renderAuthButton() {
         if (user) {
-            return (
-                <ProfileMenuToggle {...user} handleSignOut={handleSignOut} />
-            );
+            return <ProfileMenuToggle {...user} handleSignOut={handleLogOut} />;
         } else {
             return <Button onClick={handleOpen}>Log In</Button>;
         }
@@ -136,7 +139,7 @@ export function Header() {
                 </ScrollArea>
             </Drawer>
 
-            <AuthForm />
+            {!user && <AuthForm closeDrawer={closeDrawer} />}
         </>
     );
 }

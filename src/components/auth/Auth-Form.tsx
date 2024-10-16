@@ -23,7 +23,7 @@ const initialFormValues = {
     isAgree: false,
 };
 
-export function AuthForm() {
+export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
     const [type, toggle] = useToggle(["login", "register"]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -39,6 +39,7 @@ export function AuthForm() {
         form.setValues(initialFormValues);
         if (type === "register") handleToggle();
         setError(null);
+        closeDrawer();
         handleClose();
     }
 

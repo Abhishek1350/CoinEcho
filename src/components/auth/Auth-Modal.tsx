@@ -32,6 +32,7 @@ export function AuthModal({
             }}
             radius="lg"
             size="sm"
+            zIndex={1000000}
         >
             {children}
         </Modal>
