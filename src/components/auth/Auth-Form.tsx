@@ -8,6 +8,7 @@ import {
     Checkbox,
     Anchor,
     Stack,
+    Alert,
 } from "@mantine/core";
 import { AuthModal } from "./Auth-Modal";
 import { useAuthModal } from "@/context";
@@ -25,12 +26,19 @@ const initialFormValues = {
 export function AuthForm() {
     const [type, toggle] = useToggle(["login", "register"]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const { isOpen, handleClose } = useAuthModal();
 
+    function handleToggle() {
+        setError(null);
+        toggle();
+    }
+
     function handleCloseModal() {
         form.setValues(initialFormValues);
-        if (type === "register") toggle();
+        if (type === "register") handleToggle();
+        setError(null);
         handleClose();
     }
 
@@ -60,6 +68,7 @@ export function AuthForm() {
     async function handleSignup() {
         try {
             setLoading(true);
+            setError(null);
             if (loading) return;
             const { error, data } = await supabase.auth.signUp({
                 email: form.values.email,
@@ -67,7 +76,7 @@ export function AuthForm() {
             });
 
             if (!!error || !data?.user || !data?.user?.id)
-                throw new Error("Something went wrong");
+                throw new Error(error?.message ?? "Something went wrong");
 
             await supabase.from("users").insert({
                 id: data.user?.id,
@@ -77,7 +86,8 @@ export function AuthForm() {
 
             handleCloseModal();
         } catch (error) {
-            console.log(error);
+            setError((error as any)?.message ?? "Something went wrong");
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -86,6 +96,7 @@ export function AuthForm() {
     async function handleLogin() {
         try {
             setLoading(true);
+            setError(null);
             if (loading) return;
             const { error, data } = await supabase.auth.signInWithPassword({
                 email: form.values.email,
@@ -93,11 +104,12 @@ export function AuthForm() {
             });
 
             if (!!error || !data?.user || !data?.user?.id)
-                throw new Error("Something went wrong");
+                throw new Error(error?.message ?? "Something went wrong");
 
             handleCloseModal();
         } catch (error) {
-            console.log(error);
+            setError((error as any)?.message ?? "Something went wrong");
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -185,7 +197,7 @@ export function AuthForm() {
                         component="button"
                         type="button"
                         c="dimmed"
-                        onClick={() => toggle()}
+                        onClick={() => handleToggle()}
                         size="xs"
                     >
                         {type === "register"
@@ -201,6 +213,11 @@ export function AuthForm() {
                         {upperFirst(type)}
                     </Button>
                 </Group>
+                {error && (
+                    <Alert color="red" mt="md" ta="center">
+                        {error}
+                    </Alert>
+                )}
             </form>
         </AuthModal>
     );
