@@ -9,11 +9,13 @@ import {
     Anchor,
     Stack,
     Alert,
+    FileInput,
 } from "@mantine/core";
 import { AuthModal } from "./Auth-Modal";
 import { useAuthModal } from "@/context";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
+import { IconImageInPicture } from "@tabler/icons-react";
 
 const initialFormValues = {
     email: "",
@@ -21,12 +23,25 @@ const initialFormValues = {
     password: "",
     confirmPassword: "",
     isAgree: false,
+    profilePic: "",
 };
+
+interface ProfilePic {
+    value: File | null;
+    error: string;
+    loading: boolean;
+}
 
 export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
     const [type, toggle] = useToggle(["login", "register"]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [profilePic, setProfilePic] = useState<ProfilePic>({
+        value: null,
+        error: "",
+        loading: false,
+    });
 
     const { isOpen, handleClose } = useAuthModal();
 
@@ -65,6 +80,59 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                     email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
                 },
     });
+
+    async function handleImageUpload(file: File | null) {
+        if (!file || profilePic.loading) return;
+
+        if (
+            !["image/png", "image/webp", "image/jpg", "image/jpeg"].includes(
+                file.type
+            )
+        )
+            return setProfilePic({
+                ...profilePic,
+                error: "Invalid file type",
+            });
+
+        if (file.size > 2 * 1024 * 1024)
+            return setProfilePic({
+                ...profilePic,
+                error: "File size should be less than 2MB",
+            });
+
+        setProfilePic({
+            loading: true,
+            value: file,
+            error: "",
+        });
+
+        try {
+            const { data, error } = await supabase.storage
+                .from("Profile_Pics")
+                .upload(file.name, file, {
+                    cacheControl: "3600",
+                    upsert: true,
+                });
+            if (error) throw new Error();
+
+            const {
+                data: { publicUrl },
+            } = supabase.storage.from("Profile_Pics").getPublicUrl(data.path);
+
+            form.setFieldValue("profilePic", publicUrl);
+        } catch (error) {
+            setProfilePic({
+                ...profilePic,
+                value: null,
+                error: "Something went wrong",
+            });
+        } finally {
+            setProfilePic({
+                ...profilePic,
+                loading: false,
+            });
+        }
+    }
 
     async function handleSignup() {
         try {
@@ -117,56 +185,89 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
     }
 
     return (
-        <AuthModal isOpen={isOpen} handleClose={handleCloseModal}>
+        <AuthModal
+            size={type === "register" ? "md" : "sm"}
+            isOpen={isOpen}
+            handleClose={handleCloseModal}
+        >
             <form
                 onSubmit={form.onSubmit(() => {
                     type === "login" ? handleLogin() : handleSignup();
                 })}
             >
-                <Stack>
-                    {type === "register" && (
+                {type === "login" ? (
+                    <Stack>
                         <TextInput
                             required
-                            label="Name"
-                            placeholder="Abhishek"
-                            value={form.values.name}
+                            label="Email"
+                            placeholder="hello@imabhishek.online"
+                            value={form.values.email}
                             onChange={(event) =>
-                                form.setFieldValue("name", event.currentTarget.value)
+                                form.setFieldValue("email", event.currentTarget.value)
+                            }
+                            error={form.errors.email && "Invalid email"}
+                            radius="md"
+                        />
+
+                        <PasswordInput
+                            required
+                            label="Password"
+                            placeholder="Your password"
+                            value={form.values.password}
+                            onChange={(event) =>
+                                form.setFieldValue("password", event.currentTarget.value)
+                            }
+                            error={
+                                form.errors.password &&
+                                "Password should include at least 6 characters"
                             }
                             radius="md"
-                            error={form.errors.name && "Please enter a valid name"}
                         />
-                    )}
+                    </Stack>
+                ) : (
+                    <Stack>
+                        <Group grow>
+                            <TextInput
+                                required
+                                label="Name"
+                                placeholder="Abhishek"
+                                value={form.values.name}
+                                onChange={(event) =>
+                                    form.setFieldValue("name", event.currentTarget.value)
+                                }
+                                radius="md"
+                                error={form.errors.name && "Please enter a valid name"}
+                            />
 
-                    <TextInput
-                        required
-                        label="Email"
-                        placeholder="hello@imabhishek.online"
-                        value={form.values.email}
-                        onChange={(event) =>
-                            form.setFieldValue("email", event.currentTarget.value)
-                        }
-                        error={form.errors.email && "Invalid email"}
-                        radius="md"
-                    />
+                            <TextInput
+                                required
+                                label="Email"
+                                placeholder="hello@imabhishek.online"
+                                value={form.values.email}
+                                onChange={(event) =>
+                                    form.setFieldValue("email", event.currentTarget.value)
+                                }
+                                error={form.errors.email && "Invalid email"}
+                                radius="md"
+                            />
+                        </Group>
 
-                    <PasswordInput
-                        required
-                        label="Password"
-                        placeholder="Your password"
-                        value={form.values.password}
-                        onChange={(event) =>
-                            form.setFieldValue("password", event.currentTarget.value)
-                        }
-                        error={
-                            form.errors.password &&
-                            "Password should include at least 6 characters"
-                        }
-                        radius="md"
-                    />
+                        <Group grow>
+                            <PasswordInput
+                                required
+                                label="Password"
+                                placeholder="Your password"
+                                value={form.values.password}
+                                onChange={(event) =>
+                                    form.setFieldValue("password", event.currentTarget.value)
+                                }
+                                error={
+                                    form.errors.password &&
+                                    "Password should include at least 6 characters"
+                                }
+                                radius="md"
+                            />
 
-                    {type === "register" && (
-                        <>
                             <PasswordInput
                                 required
                                 label="Confirm password"
@@ -181,17 +282,33 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                                 error={form.errors.confirmPassword && "Passwords did not match"}
                                 radius="md"
                             />
-                            <Checkbox
-                                label="Yup, I'm Ready to Sign Up"
-                                checked={form.values.isAgree}
-                                onChange={(event) =>
-                                    form.setFieldValue("isAgree", event.currentTarget.checked)
-                                }
-                                error={form.errors.isAgree && "Please be ready to sign up"}
-                            />
-                        </>
-                    )}
-                </Stack>
+                        </Group>
+
+                        <FileInput
+                            rightSection={<IconImageInPicture />}
+                            label="Profile Image"
+                            placeholder="Upload profile image"
+                            rightSectionPointerEvents="none"
+                            accept="image/png,image/jpeg,image/webp,image/png"
+                            value={profilePic.value}
+                            onChange={handleImageUpload}
+                            multiple={false}
+                            classNames={{ input: "bg-secondary" }}
+                            styles={{ input: { height: "50px" } }}
+                            radius="md"
+                            error={profilePic.error && profilePic.error}
+                        />
+
+                        <Checkbox
+                            label="Yup, I'm Ready to Sign Up"
+                            checked={form.values.isAgree}
+                            onChange={(event) =>
+                                form.setFieldValue("isAgree", event.currentTarget.checked)
+                            }
+                            error={form.errors.isAgree && "Please be ready to sign up"}
+                        />
+                    </Stack>
+                )}
 
                 <Group justify="space-between" mt="xl">
                     <Anchor

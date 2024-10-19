@@ -4,14 +4,22 @@ interface Props {
     children: React.ReactNode;
     isOpen: boolean;
     handleClose: () => void;
-    type?: "auth" | "resetPassword";
+    type?: "auth" | "resetPassword" | "updateProfile";
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
+
+const headingText = {
+    auth: "Welcome to CoinEcho",
+    resetPassword: "Forgot your password?",
+    updateProfile: "Update your profile",
+};
 
 export function AuthModal({
     children,
     isOpen,
     handleClose,
     type = "auth",
+    size = "sm"
 }: Props) {
     return (
         <Modal
@@ -19,9 +27,7 @@ export function AuthModal({
             onClose={handleClose}
             title={
                 <Text size="lg" fw={700}>
-                    {type === "resetPassword"
-                        ? "Forgot your password?"
-                        : "Welcome to CoinEcho"}
+                    {headingText[type] || "Welcome to CoinEcho"}
                 </Text>
             }
             centered
@@ -31,7 +37,7 @@ export function AuthModal({
                 header: "bg-primary",
             }}
             radius="lg"
-            size="sm"
+            size={size}
             zIndex={1000000}
         >
             {children}
