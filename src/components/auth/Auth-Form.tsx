@@ -10,6 +10,8 @@ import {
     Stack,
     Alert,
     FileInput,
+    Avatar,
+    Skeleton,
 } from "@mantine/core";
 import { AuthModal } from "./Auth-Modal";
 import { useAuthModal } from "@/context";
@@ -52,6 +54,7 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
 
     function handleCloseModal() {
         form.setValues(initialFormValues);
+        setProfilePic({ value: null, error: "", loading: false });
         if (type === "register") handleToggle();
         setError(null);
         closeDrawer();
@@ -81,6 +84,8 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                 },
     });
 
+    const showImagePreview = !!profilePic.value && !!form.values.profilePic;
+
     async function handleImageUpload(file: File | null) {
         if (!file || profilePic.loading) return;
 
@@ -88,23 +93,23 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
             !["image/png", "image/webp", "image/jpg", "image/jpeg"].includes(
                 file.type
             )
-        )
-            return setProfilePic({
-                ...profilePic,
-                error: "Invalid file type",
-            });
+        ) {
+            return setProfilePic((prev) => ({ ...prev, error: "Invalid file type" }));
+        }
 
-        if (file.size > 2 * 1024 * 1024)
-            return setProfilePic({
-                ...profilePic,
+        if (file.size > 2 * 1024 * 1024) {
+            return setProfilePic((prev) => ({
+                ...prev,
                 error: "File size should be less than 2MB",
-            });
+            }));
+        }
 
-        setProfilePic({
+        setProfilePic((prev) => ({
+            ...prev,
             loading: true,
             value: file,
             error: "",
-        });
+        }));
 
         try {
             const { data, error } = await supabase.storage
@@ -121,24 +126,24 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
 
             form.setFieldValue("profilePic", publicUrl);
         } catch (error) {
-            setProfilePic({
-                ...profilePic,
+            setProfilePic((prev) => ({
+                ...prev,
                 value: null,
                 error: "Something went wrong",
-            });
+            }));
         } finally {
-            setProfilePic({
-                ...profilePic,
+            setProfilePic((prev) => ({
+                ...prev,
                 loading: false,
-            });
+            }));
         }
     }
 
     async function handleSignup() {
+        if (loading || profilePic.loading) return;
         try {
             setLoading(true);
             setError(null);
-            if (loading) return;
             const { error, data } = await supabase.auth.signUp({
                 email: form.values.email,
                 password: form.values.password,
@@ -151,6 +156,7 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                 id: data.user?.id,
                 name: form.values.name,
                 email: form.values.email,
+                profile_pic: form.values.profilePic,
             });
 
             handleCloseModal();
@@ -163,10 +169,10 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
     }
 
     async function handleLogin() {
+        if (loading) return;
         try {
             setLoading(true);
             setError(null);
-            if (loading) return;
             const { error, data } = await supabase.auth.signInWithPassword({
                 email: form.values.email,
                 password: form.values.password,
@@ -226,6 +232,16 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                     </Stack>
                 ) : (
                     <Stack>
+                        {showImagePreview && (
+                            <Group justify="center">
+                                <Avatar
+                                    src={form.values.profilePic}
+                                    radius="xl"
+                                    size="lg"
+                                    alt={form.values.name}
+                                />
+                            </Group>
+                        )}
                         <Group grow>
                             <TextInput
                                 required
@@ -284,20 +300,25 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                             />
                         </Group>
 
-                        <FileInput
-                            rightSection={<IconImageInPicture />}
-                            label="Profile Image"
-                            placeholder="Upload profile image"
-                            rightSectionPointerEvents="none"
-                            accept="image/png,image/jpeg,image/webp,image/png"
-                            value={profilePic.value}
-                            onChange={handleImageUpload}
-                            multiple={false}
-                            classNames={{ input: "bg-secondary" }}
-                            styles={{ input: { height: "50px" } }}
-                            radius="md"
-                            error={profilePic.error && profilePic.error}
-                        />
+                        {profilePic.loading ? (
+                            <Skeleton h={50} />
+                        ) : (
+                            <FileInput
+                                rightSection={<IconImageInPicture />}
+                                label="Profile Image"
+                                placeholder="Upload profile image"
+                                rightSectionPointerEvents="none"
+                                accept="image/png,image/jpeg,image/webp,image/png"
+                                value={profilePic.value}
+                                onChange={handleImageUpload}
+                                multiple={false}
+                                classNames={{ input: "bg-secondary" }}
+                                styles={{ input: { height: "50px" } }}
+                                radius="md"
+                                error={profilePic.error && profilePic.error}
+                                disabled={profilePic.loading}
+                            />
+                        )}
 
                         <Checkbox
                             label="Yup, I'm Ready to Sign Up"

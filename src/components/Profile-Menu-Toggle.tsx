@@ -25,7 +25,7 @@ export function ProfileMenuToggle({
             </Menu.Target>
             <Menu.Dropdown>
                 <Menu.Label>
-                    {name} - {email}
+                    {email}
                 </Menu.Label>
                 <Menu.Item>
                     <Button
