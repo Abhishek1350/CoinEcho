@@ -232,16 +232,6 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                     </Stack>
                 ) : (
                     <Stack>
-                        {showImagePreview && (
-                            <Group justify="center">
-                                <Avatar
-                                    src={form.values.profilePic}
-                                    radius="xl"
-                                    size="lg"
-                                    alt={form.values.name}
-                                />
-                            </Group>
-                        )}
                         <Group grow>
                             <TextInput
                                 required
@@ -300,25 +290,53 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
                             />
                         </Group>
 
-                        {profilePic.loading ? (
-                            <Skeleton h={50} />
-                        ) : (
-                            <FileInput
-                                rightSection={<IconImageInPicture />}
-                                label="Profile Image"
-                                placeholder="Upload profile image"
-                                rightSectionPointerEvents="none"
-                                accept="image/png,image/jpeg,image/webp,image/png"
-                                value={profilePic.value}
-                                onChange={handleImageUpload}
-                                multiple={false}
-                                classNames={{ input: "bg-secondary" }}
-                                styles={{ input: { height: "50px" } }}
-                                radius="md"
-                                error={profilePic.error && profilePic.error}
-                                disabled={profilePic.loading}
-                            />
-                        )}
+                        {
+                            profilePic.loading ? (
+                                <Skeleton h={50} />
+                            ) : (
+                                showImagePreview ? (
+                                    <Group gap={5}>
+                                        <Avatar
+                                            src={form.values.profilePic}
+                                            radius="xl"
+                                            size="lg"
+                                            alt={form.values.name}
+                                        />
+                                        <FileInput
+                                            rightSection={<IconImageInPicture />}
+                                            placeholder="Upload profile image"
+                                            rightSectionPointerEvents="none"
+                                            accept="image/png,image/jpeg,image/webp,image/png"
+                                            value={profilePic.value}
+                                            onChange={handleImageUpload}
+                                            multiple={false}
+                                            classNames={{ input: "bg-secondary" }}
+                                            styles={{ input: { height: "50px" } }}
+                                            radius="md"
+                                            error={profilePic.error && profilePic.error}
+                                            disabled={profilePic.loading}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </Group>
+                                ) : (
+                                    <FileInput
+                                        rightSection={<IconImageInPicture />}
+                                        label="Profile Image"
+                                        placeholder="Upload profile image"
+                                        rightSectionPointerEvents="none"
+                                        accept="image/png,image/jpeg,image/webp,image/png"
+                                        value={profilePic.value}
+                                        onChange={handleImageUpload}
+                                        multiple={false}
+                                        classNames={{ input: "bg-secondary" }}
+                                        styles={{ input: { height: "50px" } }}
+                                        radius="md"
+                                        error={profilePic.error && profilePic.error}
+                                        disabled={profilePic.loading}
+                                    />
+                                )
+                            )
+                        }
 
                         <Checkbox
                             label="Yup, I'm Ready to Sign Up"
