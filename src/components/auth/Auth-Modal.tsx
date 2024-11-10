@@ -10,7 +10,7 @@ interface Props {
 
 const headingText = {
     auth: "Welcome to CoinEcho",
-    resetPassword: "Forgot your password?",
+    resetPassword: "Update your password",
     updateProfile: "Update your profile",
 };
 

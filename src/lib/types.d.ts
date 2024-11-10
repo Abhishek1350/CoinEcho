@@ -116,7 +116,7 @@ export interface NewsResponse {
 }
 
 export interface User {
-    uuid: string;
+    id: string;
     name: string;
     email: string;
     profile_pic: string | null;

@@ -4,6 +4,7 @@ import { User } from "@/lib/types";
 
 interface Props extends User {
     handleSignOut: () => Promise<void>;
+    openUpdateProfileModal: () => void;
 }
 
 export function ProfileMenuToggle({
@@ -11,6 +12,7 @@ export function ProfileMenuToggle({
     profile_pic,
     email,
     handleSignOut,
+    openUpdateProfileModal
 }: Props) {
     return (
         <Menu
@@ -38,6 +40,7 @@ export function ProfileMenuToggle({
                             />
                         }
                         miw={130}
+                        onClick={openUpdateProfileModal}
                     >
                         Update Profile
                     </Button>
