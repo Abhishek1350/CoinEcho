@@ -58,7 +58,10 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
 
     function handleCloseModal() {
         setProfilePic({ value: null, error: "", loading: false });
-        if (type === "register") handleToggle();
+        if (type === "resetPassword") {
+            handleToggle();
+            form.reset();
+        }
         setError(null);
         closeDrawer();
         handleClose();
@@ -143,17 +146,35 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
             setLoading(true);
             setError(null);
 
-            if (type === "resetPassword") throw new Error("Not implemented yet");
-            const { error } = await supabase
-                .from("users")
-                .update({
-                    name: form.values.name,
-                    profile_pic: form.values.profilePic,
-                })
-                .eq("id", user?.id);
+            if (type === "resetPassword") {
+                const { error: signInError, data: userData } =
+                    await supabase.auth.signInWithPassword({
+                        email: user?.email ?? "",
+                        password: form.values.currentPassword ?? "",
+                    });
 
-            if (error) throw new Error(error.message);
-            supabase.auth.updateUser({ data: { name: form.values.name } });
+                if (signInError || !userData?.user)
+                    throw new Error("Current password is incorrect");
+
+                const { error: updateError } = await supabase.auth.updateUser({
+                    password: form.values.newPassword,
+                });
+
+                if (updateError) throw new Error(updateError.message);
+            }
+
+            if (type === "updateProfile") {
+                const { error } = await supabase
+                    .from("users")
+                    .update({
+                        name: form.values.name,
+                        profile_pic: form.values.profilePic,
+                    })
+                    .eq("id", user?.id);
+
+                if (error) throw new Error(error.message);
+                supabase.auth.updateUser({ data: { name: form.values.name } });
+            }
 
             handleCloseModal();
         } catch (error) {
@@ -229,7 +250,7 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
                         {profilePic.loading ? (
                             <Skeleton h={50} />
                         ) : profileImage ? (
-                            <Group gap={5}>
+                            <Group gap={5} flex={1}>
                                 <Avatar
                                     src={profileImage as string}
                                     radius="xl"
@@ -241,7 +262,6 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
                                     placeholder="Upload profile image"
                                     rightSectionPointerEvents="none"
                                     accept="image/png,image/jpeg,image/webp,image/png"
-                                    value={profilePic.value}
                                     onChange={handleImageUpload}
                                     multiple={false}
                                     classNames={{ input: "bg-secondary" }}
@@ -281,8 +301,8 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
                         size="xs"
                     >
                         {type === "resetPassword"
-                            ? "Want to update your password?"
-                            : "Want to update your profile?"}
+                            ? "Want to update your profile? "
+                            : "Want to update your password?"}
                     </Anchor>
                     <Button
                         loading={loading}
