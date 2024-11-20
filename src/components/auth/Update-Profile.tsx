@@ -57,7 +57,6 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
     }
 
     function handleCloseModal() {
-        form.setValues(initialFormValues);
         setProfilePic({ value: null, error: "", loading: false });
         if (type === "register") handleToggle();
         setError(null);
