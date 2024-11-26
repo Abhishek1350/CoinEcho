@@ -31,6 +31,7 @@ import {
 } from "@/lib/utils";
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { Supply } from "@/lib/types";
+import { useLikes } from "@/hooks/useLikes";
 
 export default function CoinDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -39,7 +40,7 @@ export default function CoinDetailsPage() {
     coinDetailsTimelineFilters[0]
   );
 
-  const [isLiked, setIsLiked] = useState(false);
+  const { likes, updateLike } = useLikes({ coinId: coin_uuid || "" });
 
   const { selectedCurrency } = useCurrency();
 
@@ -120,10 +121,10 @@ export default function CoinDetailsPage() {
 
             <Group justify="center">
               <ShareButton title={coin?.name} text={coin?.description} />
-              <WishlistButton
-                isLiked={isLiked}
-                onClick={() => setIsLiked(!isLiked)}
-              />
+              <Group gap={5}>
+                <WishlistButton isLiked={likes?.isLiked} onClick={updateLike} />
+                {likes?.count > 0 && <Text>{likes?.count}</Text>}
+              </Group>
               <SegmentedControl
                 data={coinDetailsTimelineFilters}
                 defaultValue={selectedTimeline}
@@ -267,7 +268,7 @@ function SupplyCard({ data }: { data: Supply }) {
         Supply
       </Text>
       <Text fz="lg" fw={600}>
-        {data?.circulating} / {data?.max ?? "∞"} 
+        {data?.circulating} / {data?.max ?? "∞"}
       </Text>
       <Progress value={percentage} mt="md" size="lg" radius="xl" />
     </Card>
