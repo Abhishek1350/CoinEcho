@@ -22,6 +22,7 @@ import { useGlobalStats } from "@/lib/useApi";
 import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
 import { useSearchParams } from "react-router-dom";
+import { useUserLikes } from "@/hooks/useUserLikes";
 
 export default function HomePage() {
   const { selectedCurrency } = useCurrency();
@@ -31,6 +32,8 @@ export default function HomePage() {
   const { data: globalStats, isLoading: isLoadingGlobalStats } = useGlobalStats(
     { referenceCurrencyUuid: selectedCurrency.uuid }
   );
+
+  const { userLikes, isLoading: isLoadingUserLikes } = useUserLikes();
 
   const { totalCoins, totalMarketCap, total24hVolume, btcDominance } =
     globalStats?.data || {};
@@ -104,12 +107,7 @@ export default function HomePage() {
           <SearchInput totalCoins={totalCoins} />
         </Box>
 
-        <SimpleGrid
-          cols={{ base: 1, sm: 3 }}
-          maw={800}
-          mx="auto"
-          mt="xl"
-        >
+        <SimpleGrid cols={{ base: 1, sm: 3 }} maw={800} mx="auto" mt="xl">
           {globalStatsMapping.map((stat) => (
             <GlobalStatItem
               key={stat.label}
@@ -139,23 +137,6 @@ export default function HomePage() {
             <Stack gap="lg">
               <Box>
                 <Title order={4} mb="md">
-                  New on CoinEcho
-                </Title>
-                <Stack align="flex-start" justify="center" gap="sm">
-                  {isLoadingGlobalStats
-                    ? Array.from({ length: 3 }).map((_, i) => (
-                      <StatsCoinLoader key={i} />
-                    ))
-                    : globalStats?.data?.newestCoins?.map((coin) => (
-                      <StatsCoin key={coin.uuid} {...coin} />
-                    ))}
-                </Stack>
-              </Box>
-
-              <Divider />
-
-              <Box>
-                <Title order={4} mb="md">
                   Tredning on CoinEcho
                 </Title>
                 <Stack align="flex-start" justify="center" gap="sm">
@@ -168,6 +149,40 @@ export default function HomePage() {
                     ))}
                 </Stack>
               </Box>
+
+              <Divider />
+
+              {userLikes?.length ? (
+                <Box>
+                  <Title order={4} mb="md">
+                    Your Favorites
+                  </Title>
+                  <Stack align="flex-start" justify="center" gap="sm">
+                    {isLoadingUserLikes
+                      ? Array.from({ length: 3 }).map((_, i) => (
+                        <StatsCoinLoader key={i} />
+                      ))
+                      : userLikes?.map((coin) => (
+                        <StatsCoin key={coin.uuid} {...coin} />
+                      ))}
+                  </Stack>
+                </Box>
+              ) : (
+                <Box>
+                  <Title order={4} mb="md">
+                    New on CoinEcho
+                  </Title>
+                  <Stack align="flex-start" justify="center" gap="sm">
+                    {isLoadingGlobalStats
+                      ? Array.from({ length: 3 }).map((_, i) => (
+                        <StatsCoinLoader key={i} />
+                      ))
+                      : globalStats?.data?.newestCoins?.map((coin) => (
+                        <StatsCoin key={coin.uuid} {...coin} />
+                      ))}
+                  </Stack>
+                </Box>
+              )}
             </Stack>
           </Grid.Col>
         </Grid>

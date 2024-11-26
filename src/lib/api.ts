@@ -77,6 +77,15 @@ class Api {
         return this.fetchJson<CoinDetailsResponse>(url, "coins");
     }
 
+    public static getCoinsByIds(params: {
+        uuids: string[];
+        referenceCurrencyUuid?: string;
+        limit?: number;
+    }): Promise<CoinsResponse> {
+        const url = buildUrlWithParams(`${cryptoApiBaseUrl}/coins`, params);
+        return this.fetchJson<CoinsResponse>(url, "coins");
+    }
+
     public static getNews(provider: string): Promise<NewsResponse> {
         const url = `${newsApiBaseUrl}/${provider}`;
         return this.fetchJson<NewsResponse>(url, "news");
