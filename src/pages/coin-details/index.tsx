@@ -9,6 +9,7 @@ import {
   Card,
   Progress,
   Grid,
+  SimpleGrid
 } from "@mantine/core";
 import classes from "./styles.module.css";
 import { useSearchParams, Navigate, Link } from "react-router-dom";
@@ -20,6 +21,8 @@ import {
   WishlistButton,
   ShareButton,
   BigChart,
+  CommentForm,
+  CommentCard
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
@@ -32,6 +35,7 @@ import {
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { Supply } from "@/lib/types";
 import { useLikes } from "@/hooks/useLikes";
+import { useAuth } from "@/context";
 
 export default function CoinDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -40,7 +44,10 @@ export default function CoinDetailsPage() {
     coinDetailsTimelineFilters[0]
   );
 
+  const { user } = useAuth();
+
   const { likes, updateLike } = useLikes({ coinId: coin_uuid || "" });
+
 
   const { selectedCurrency } = useCurrency();
 
@@ -208,6 +215,21 @@ export default function CoinDetailsPage() {
               selectedCurrency={selectedCurrency.sign}
             />
           </Box>
+        </Box>
+
+        <Box className={classes.comments} mt={50}>
+          {
+            user && (
+              <CommentForm user={user} />
+            )
+          }
+
+          <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
+            <CommentCard />
+            <CommentCard />
+            <CommentCard />
+            <CommentCard />
+          </SimpleGrid>
         </Box>
       </Container>
     </section>
