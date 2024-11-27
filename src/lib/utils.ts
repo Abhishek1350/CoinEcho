@@ -133,3 +133,34 @@ export function getTimeAgo(dateString: string): string {
 export function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function getRelativeTime(dateString: string): string {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    const secondsInMinute = 60;
+    const secondsInHour = 60 * 60;
+    const secondsInDay = 24 * 60 * 60;
+    const secondsInWeek = 7 * 24 * 60 * 60;
+
+    let timeAgo: string;
+
+    if (diffInSeconds < secondsInMinute) {
+        timeAgo = diffInSeconds <= 5 ? 'Just now' : `${diffInSeconds} seconds ago`;
+    } else if (diffInSeconds < secondsInHour) {
+        const minutes = Math.floor(diffInSeconds / secondsInMinute);
+        timeAgo = minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+    } else if (diffInSeconds < secondsInDay) {
+        const hours = Math.floor(diffInSeconds / secondsInHour);
+        timeAgo = hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+    } else if (diffInSeconds < secondsInWeek) {
+        const days = Math.floor(diffInSeconds / secondsInDay);
+        timeAgo = days === 1 ? '1 day ago' : `${days} days ago`;
+    } else {
+        timeAgo = getTimeAgo(dateString);
+    }
+
+    return timeAgo;
+}
+

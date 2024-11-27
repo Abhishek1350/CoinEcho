@@ -36,7 +36,9 @@ export function useLikes({ coinId }: { coinId: string }) {
                     .from("likes")
                     .insert({ user_id: user.id, item_id: coinId });
             }
-        } catch (error) { }
+        } catch (error) { 
+            console.error(error)
+        }
 
         setIsLoading(false);
     }

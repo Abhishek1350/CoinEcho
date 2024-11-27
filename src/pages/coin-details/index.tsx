@@ -9,7 +9,7 @@ import {
   Card,
   Progress,
   Grid,
-  SimpleGrid
+  SimpleGrid,
 } from "@mantine/core";
 import classes from "./styles.module.css";
 import { useSearchParams, Navigate, Link } from "react-router-dom";
@@ -23,7 +23,7 @@ import {
   BigChart,
   CommentForm,
   CommentCard,
-  CommentCardLoader
+  CommentCardLoader,
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
@@ -36,6 +36,7 @@ import {
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { Supply } from "@/lib/types";
 import { useLikes } from "@/hooks/useLikes";
+import { useComments } from "@/hooks/userComments";
 import { useAuth } from "@/context";
 
 export default function CoinDetailsPage() {
@@ -49,6 +50,11 @@ export default function CoinDetailsPage() {
 
   const { likes, updateLike } = useLikes({ coinId: coin_uuid || "" });
 
+  const {
+    comments,
+    isLoading: isLoadingComments,
+    addComment,
+  } = useComments({ coinId: coin_uuid || "" });
 
   const { selectedCurrency } = useCurrency();
 
@@ -218,15 +224,25 @@ export default function CoinDetailsPage() {
           </Box>
         </Box>
 
-        <Box className={classes.comments} mt={50}>
-          <CommentForm user={user} />
-
-          <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
-            <CommentCard />
-            <CommentCardLoader />
-            <CommentCardLoader />
-            <CommentCard />
-          </SimpleGrid>
+        <Box className={classes.comments} mt={50} key={comments?.length}>
+          <CommentForm
+            user={user}
+            loading={isLoadingComments}
+            onSubmit={addComment}
+          />
+          {isLoadingComments ? (
+            <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <CommentCardLoader key={index} />
+              ))}
+            </SimpleGrid>
+          ) : comments?.length ? (
+            <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
+              {comments.map((comment) => (
+                <CommentCard key={comment.id} {...comment} />
+              ))}
+            </SimpleGrid>
+          ) : null}
         </Box>
       </Container>
     </section>
