@@ -2,7 +2,7 @@ import { User } from "@/lib/types";
 import { Group, Avatar, Textarea, Button } from "@mantine/core";
 
 interface CommentFormProps {
-    user: Pick<User, "name" | "profile_pic">;
+    user?: Pick<User, "name" | "profile_pic"> | null;
     nested?: boolean;
     loading?: boolean;
 }
@@ -17,8 +17,8 @@ export function CommentForm({
             <Group align="flex-start">
                 <Avatar
                     size={nested ? "md" : "lg"}
-                    name={user?.name}
-                    src={user.profile_pic}
+                    name={user?.name || "Abhishek"}
+                    src={user?.profile_pic}
                     color="initials"
                     alt={user?.name}
                 />

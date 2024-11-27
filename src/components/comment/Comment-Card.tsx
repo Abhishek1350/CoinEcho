@@ -68,7 +68,7 @@ export function CommentCard() {
 
 export function CommentCardLoader() {
     return (
-        <Paper withBorder radius="md">
+        <Paper withBorder radius="md" p="md" h="fit-content">
             <Group>
                 <Skeleton height={40} width={40} circle />
                 <div>
@@ -76,7 +76,12 @@ export function CommentCardLoader() {
                     <Skeleton height={12} width={100} mt="xs" />
                 </div>
             </Group>
-            <Skeleton height={100} mt="md" radius="md" />
+            <Box pl={54} mt="sm">
+                <Text>
+                    <Skeleton height={60} />
+                </Text>
+                <Skeleton height={12} width={80} mt="sm" />
+            </Box>
         </Paper>
     );
 }

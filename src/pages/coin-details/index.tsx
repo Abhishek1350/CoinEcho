@@ -22,7 +22,8 @@ import {
   ShareButton,
   BigChart,
   CommentForm,
-  CommentCard
+  CommentCard,
+  CommentCardLoader
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
@@ -218,16 +219,12 @@ export default function CoinDetailsPage() {
         </Box>
 
         <Box className={classes.comments} mt={50}>
-          {
-            user && (
-              <CommentForm user={user} />
-            )
-          }
+          <CommentForm user={user} />
 
           <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
             <CommentCard />
-            <CommentCard />
-            <CommentCard />
+            <CommentCardLoader />
+            <CommentCardLoader />
             <CommentCard />
           </SimpleGrid>
         </Box>
