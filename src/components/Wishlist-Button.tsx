@@ -15,7 +15,7 @@ export function WishlistButton({isLiked, onClick}: Props) {
             aria-label="Add to wishlist"
             className="bg-secondary"
         >
-            {isLiked ? <IconStarFilled color="yellow" stroke={1.5} /> : <IconStar stroke={1.5} />}
+            {isLiked ? <IconStarFilled color="red" stroke={1.5} /> : <IconStar stroke={1.5} />}
         </ActionIcon>
     );
 }
