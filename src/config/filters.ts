@@ -96,10 +96,10 @@ export const orderDirectionFilters = [
 ];
 
 export const newsProviderFilters = [
-    "coindesk",
     "cointelegraph",
     "bitcoinist",
     "decrypt",
+    "coindesk",
     "theguardian",
 ];
 
