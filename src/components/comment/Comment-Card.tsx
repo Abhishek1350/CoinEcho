@@ -7,7 +7,7 @@ import {
     Avatar,
     Box,
 } from "@mantine/core";
-import { Comment } from "@/hooks/userComments";
+import { Comment } from "@/hooks/useComments";
 import { getRelativeTime } from "@/lib/utils";
 
 export function CommentCard({ user, text, created_at }: Comment) {

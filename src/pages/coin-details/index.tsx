@@ -36,7 +36,7 @@ import {
 import { IconArrowDownRight, IconArrowUpRight } from "@tabler/icons-react";
 import { Supply } from "@/lib/types";
 import { useLikes } from "@/hooks/useLikes";
-import { useComments } from "@/hooks/userComments";
+import { useComments } from "@/hooks/useComments";
 import { useAuth } from "@/context";
 
 export default function CoinDetailsPage() {
@@ -223,7 +223,7 @@ export default function CoinDetailsPage() {
           </Box>
         </Box>
 
-        <Box className={classes.comments} mt={50} key={comments?.length}>
+        <Box className={classes.comments} mt={50}>
           <CommentForm
             user={user}
             loading={isLoadingComments}
