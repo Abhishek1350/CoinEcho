@@ -48,7 +48,7 @@ export default function CoinDetailsPage() {
 
   const { user } = useAuth();
 
-  const { likes, updateLike } = useLikes({ coinId: coin_uuid || "" });
+  const { likes, isLoading: isLoadingLikes, updateLike } = useLikes({ coinId: coin_uuid || "" });
 
   const {
     comments,
@@ -136,8 +136,7 @@ export default function CoinDetailsPage() {
             <Group justify="center">
               <ShareButton title={coin?.name} text={coin?.description} />
               <Group gap={5}>
-                <WishlistButton isLiked={likes?.isLiked} onClick={updateLike} />
-                {likes?.count > 0 && <Text>{likes?.count}</Text>}
+                <WishlistButton isLoading={isLoadingLikes} isLiked={likes?.isLiked} onClick={updateLike} />
               </Group>
               <SegmentedControl
                 data={coinDetailsTimelineFilters}

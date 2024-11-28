@@ -30,14 +30,18 @@ export function useLikes({ coinId }: { coinId: string }) {
 
         try {
             if (likes.isLiked) {
-                await supabase.from("likes").delete().eq("item_id", coinId);
+                await supabase
+                    .from("likes")
+                    .delete()
+                    .eq("item_id", coinId)
+                    .eq("user_id", user.id);
             } else {
                 await supabase
                     .from("likes")
                     .insert({ user_id: user.id, item_id: coinId });
             }
-        } catch (error) { 
-            console.error(error)
+        } catch (error) {
+            console.error(error);
         }
 
         setIsLoading(false);
@@ -46,6 +50,7 @@ export function useLikes({ coinId }: { coinId: string }) {
     useEffect(() => {
         (async function () {
             if (!coinId) return;
+            setIsLoading(true);
             try {
                 const { data, error } = await supabase
                     .from("likes")
@@ -65,8 +70,9 @@ export function useLikes({ coinId }: { coinId: string }) {
             } catch (error) {
                 console.error(error);
             }
+            setIsLoading(false);
         })();
     }, [coinId, user]);
 
-    return { likes, updateLike };
+    return { likes, isLoading, updateLike };
 }
