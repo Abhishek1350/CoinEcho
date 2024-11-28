@@ -5,14 +5,14 @@ import { useState } from "react";
 
 interface CommentFormProps {
     user?: Pick<User, "name" | "profile_pic"> | null;
-    nested?: boolean;
+    parentCommentId?: string | null;
     loading?: boolean;
-    onSubmit: (text: string) => Promise<void>;
+    onSubmit: (text: string, parentCommentId?: string | null) => Promise<void>;
 }
 
 export function CommentForm({
     user,
-    nested = false,
+    parentCommentId,
     loading = false,
     onSubmit,
 }: CommentFormProps) {
@@ -26,7 +26,7 @@ export function CommentForm({
     async function handleSubmit() {
         if (!user) handleOpenAuthModal();
         if (!commentText || !commentText.trim() || !user) return;
-        onSubmit(commentText);
+        onSubmit(commentText, parentCommentId);
         setCommentText("");
     }
 
@@ -34,7 +34,7 @@ export function CommentForm({
         <div>
             <Group align="flex-start">
                 <Avatar
-                    size={nested ? "md" : "lg"}
+                    size={parentCommentId ? "md" : "lg"}
                     name={user?.name || "Abhishek"}
                     src={user?.profile_pic}
                     color="initials"
@@ -43,7 +43,7 @@ export function CommentForm({
                 <Textarea
                     placeholder="Type your comment here..."
                     autosize
-                    minRows={nested ? 2 : 3}
+                    minRows={parentCommentId ? 2 : 3}
                     flex={1}
                     maxLength={2000}
                     value={commentText}
@@ -57,7 +57,7 @@ export function CommentForm({
                     disabled={loading || !commentText?.trim()}
                     onClick={handleSubmit}
                 >
-                    {nested ? "Reply" : "Post Comment"}
+                    {parentCommentId ? "Reply" : "Post Comment"}
                 </Button>
             </Group>
         </div>

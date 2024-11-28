@@ -52,3 +52,7 @@ select {
   background-color: light-dark(#fff9f9, #1e2025);
   color: light-dark(#1e2025, #fff9f9);
 }
+
+.comment-text {
+  white-space: pre-line;
+}

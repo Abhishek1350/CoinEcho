@@ -238,7 +238,7 @@ export default function CoinDetailsPage() {
           ) : comments?.length ? (
             <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
               {comments.map((comment) => (
-                <CommentCard key={comment.id} {...comment} />
+                <CommentCard key={comment.id} {...comment} onSubmit={addComment} />
               ))}
             </SimpleGrid>
           ) : null}

@@ -6,11 +6,27 @@ import {
     Group,
     Avatar,
     Box,
+    Anchor,
 } from "@mantine/core";
 import { Comment } from "@/hooks/useComments";
 import { getRelativeTime } from "@/lib/utils";
+import { useState } from "react";
+import { CommentForm } from "./Comment-Form";
 
-export function CommentCard({ user, text, created_at }: Comment) {
+interface CommentCardProps extends Comment {
+    onSubmit: (text: string) => Promise<void>;
+}
+
+export function CommentCard({
+    id,
+    user,
+    text,
+    created_at,
+    replies,
+    onSubmit,
+}: CommentCardProps) {
+    const [toggleReply, setToggleReply] = useState(false);
+
     return (
         <Paper withBorder radius="md" p="md" mih={130}>
             <Group>
@@ -37,10 +53,25 @@ export function CommentCard({ user, text, created_at }: Comment) {
                     hideLabel="Hide"
                     styles={{ control: { paddingLeft: "54px" } }}
                 >
-                    <Text size="sm" pl={54}>
+                    <Text size="sm" pl={54} className="comment-text">
                         {text}
                     </Text>
                 </Spoiler>
+
+                <Group justify="flex-end">
+                    <Anchor
+                        onClick={() => setToggleReply(!toggleReply)}
+                        size="sm"
+                    >
+                        {toggleReply ? "Cancel" : "Reply"}
+                    </Anchor>
+                </Group>
+
+                {toggleReply && (
+                    <Box mt="sm">
+                        <CommentForm user={user} parentCommentId={id} onSubmit={onSubmit} />
+                    </Box>
+                )}
             </Box>
         </Paper>
     );
