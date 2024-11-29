@@ -44,22 +44,37 @@ export function useComments({ coinId }: { coinId: string }) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    const getComments = useCallback(async () => {
+        if (!coinId) return;
+        setIsLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from("comments")
+                .select("*, user(name, profile_pic)")
+                .eq("item_id", coinId)
+                .order("created_at", { ascending: false });
+
+            if (error) throw new Error();
+            setComments(() => groupCommentsByParentId(data));
+        } catch (error) {
+            console.error(error);
+        }
+        setIsLoading(false);
+    }, [coinId]);
+
     const addComment = useCallback(
         async (text: string, parentId?: string | null) => {
             if (!user || !coinId) return;
             setIsLoading(true);
             try {
-                const { error, data } = await supabase
+                const { error } = await supabase
                     .from("comments")
                     .insert({ user: user.id, item_id: coinId, text, parent_id: parentId })
                     .select("*, user(name, profile_pic)");
 
                 if (error) throw new Error(error.message);
 
-                setComments((prev) => {
-                    const newData = [...data, ...prev];
-                    return groupCommentsByParentId(newData);
-                });
+                await getComments();
             } catch (error) {
                 console.error(error);
             }
@@ -69,24 +84,8 @@ export function useComments({ coinId }: { coinId: string }) {
     );
 
     useEffect(() => {
-        (async function () {
-            if (!coinId) return;
-            setIsLoading(true);
-            try {
-                const { data, error } = await supabase
-                    .from("comments")
-                    .select("*, user(name, profile_pic)")
-                    .eq("item_id", coinId)
-                    .order("created_at", { ascending: false });
-
-                if (error) throw new Error();
-                setComments(() => groupCommentsByParentId(data));
-            } catch (error) {
-                console.error(error);
-            }
-            setIsLoading(false);
-        })();
-    }, [coinId]);
+        getComments();
+    }, [getComments]);
 
     return { comments, isLoading, addComment };
 }

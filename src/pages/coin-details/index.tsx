@@ -9,7 +9,7 @@ import {
   Card,
   Progress,
   Grid,
-  SimpleGrid,
+  Flex,
 } from "@mantine/core";
 import classes from "./styles.module.css";
 import { useSearchParams, Navigate, Link } from "react-router-dom";
@@ -48,7 +48,11 @@ export default function CoinDetailsPage() {
 
   const { user } = useAuth();
 
-  const { likes, isLoading: isLoadingLikes, updateLike } = useLikes({ coinId: coin_uuid || "" });
+  const {
+    likes,
+    isLoading: isLoadingLikes,
+    updateLike,
+  } = useLikes({ coinId: coin_uuid || "" });
 
   const {
     comments,
@@ -136,7 +140,11 @@ export default function CoinDetailsPage() {
             <Group justify="center">
               <ShareButton title={coin?.name} text={coin?.description} />
               <Group gap={5}>
-                <WishlistButton isLoading={isLoadingLikes} isLiked={likes?.isLiked} onClick={updateLike} />
+                <WishlistButton
+                  isLoading={isLoadingLikes}
+                  isLiked={likes?.isLiked}
+                  onClick={updateLike}
+                />
               </Group>
               <SegmentedControl
                 data={coinDetailsTimelineFilters}
@@ -230,17 +238,21 @@ export default function CoinDetailsPage() {
             onSubmit={addComment}
           />
           {isLoadingComments ? (
-            <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
+            <Flex gap={20} direction="column" mt={30}>
               {Array.from({ length: 4 }).map((_, index) => (
                 <CommentCardLoader key={index} />
               ))}
-            </SimpleGrid>
+            </Flex>
           ) : comments?.length ? (
-            <SimpleGrid cols={{ base: 1, sm: 2 }} verticalSpacing={20} mt={30}>
+            <Flex gap={20} direction="column" mt={30}>
               {comments.map((comment) => (
-                <CommentCard key={comment.id} {...comment} onSubmit={addComment} />
+                <CommentCard
+                  key={comment.id}
+                  {...comment}
+                  onSubmit={addComment}
+                />
               ))}
-            </SimpleGrid>
+            </Flex>
           ) : null}
         </Box>
       </Container>

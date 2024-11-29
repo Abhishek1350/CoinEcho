@@ -7,6 +7,7 @@ import {
     Avatar,
     Box,
     Anchor,
+    Flex,
 } from "@mantine/core";
 import { Comment } from "@/hooks/useComments";
 import { getRelativeTime } from "@/lib/utils";
@@ -26,6 +27,7 @@ export function CommentCard({
     onSubmit,
 }: CommentCardProps) {
     const [toggleReply, setToggleReply] = useState(false);
+    const [showReplies, setShowReplies] = useState(false);
 
     return (
         <Paper withBorder radius="md" p="md" mih={130}>
@@ -58,19 +60,29 @@ export function CommentCard({
                     </Text>
                 </Spoiler>
 
-                <Group justify="flex-end">
-                    <Anchor
-                        onClick={() => setToggleReply(!toggleReply)}
-                        size="sm"
-                    >
+                <Group justify="space-between" pl={54} mt="sm">
+                    <Anchor onClick={() => setToggleReply(!toggleReply)} size="sm">
                         {toggleReply ? "Cancel" : "Reply"}
                     </Anchor>
+                    {replies?.length ? (
+                        <Anchor onClick={() => setShowReplies(!showReplies)} size="sm">
+                            {showReplies ? "Hide" : "Show"} replies
+                        </Anchor>
+                    ) : null}
                 </Group>
 
                 {toggleReply && (
                     <Box mt="sm">
                         <CommentForm user={user} parentCommentId={id} onSubmit={onSubmit} />
                     </Box>
+                )}
+
+                {showReplies && (
+                    <Flex mt="md" direction="column" gap="md">
+                        {replies?.map((reply) => (
+                            <CommentCard key={reply.id} {...reply} onSubmit={onSubmit} />
+                        ))}
+                    </Flex>
                 )}
             </Box>
         </Paper>
