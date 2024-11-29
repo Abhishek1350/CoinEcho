@@ -38,6 +38,8 @@ import { Supply } from "@/lib/types";
 import { useLikes } from "@/hooks/useLikes";
 import { useComments } from "@/hooks/useComments";
 import { useAuth } from "@/context";
+import { metaData } from "@/config/meta-data";
+import { useMetaData } from "@/hooks/useMetaData";
 
 export default function CoinDetailsPage() {
   const [searchParams] = useSearchParams();
@@ -80,6 +82,11 @@ export default function CoinDetailsPage() {
   );
 
   const coin = details?.data.coin;
+
+  useMetaData({
+    title: `${coin?.name}-CoinEcho` || metaData.home.title,
+    description: coin?.description || metaData.home.description,
+  });
 
   if (isLoading || isLoadingGlobalStats) {
     return <PageSkeleton />;

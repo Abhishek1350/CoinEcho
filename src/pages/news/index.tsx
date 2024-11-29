@@ -12,11 +12,18 @@ import { useState } from "react";
 import { useNews } from "@/lib/useApi";
 import { NewsCard, NewsCardLoader } from "@/components";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { useMetaData } from "@/hooks/useMetaData";
+import { metaData } from "@/config/meta-data";
 
 export default function NewsPage() {
   const [selectedNewsProvider, setSelectedNewsProvider] = useState(
     newsProviderFilters[0]
   );
+
+  useMetaData({
+    title: metaData.news.title,
+    description: metaData.news.description,
+  });
 
   const { data, isLoading, isError } = useNews(selectedNewsProvider);
 

@@ -23,8 +23,15 @@ import { formatCompactCurrency } from "@/lib/utils";
 import { useCurrency } from "@/context/Currency-Context";
 import { useSearchParams } from "react-router-dom";
 import { useUserLikes } from "@/hooks/useUserLikes";
+import { useMetaData } from "@/hooks/useMetaData";
+import { metaData } from "@/config/meta-data";
 
 export default function HomePage() {
+  useMetaData({
+    title: metaData.home.title,
+    description: metaData.home.description,
+  });
+  
   const { selectedCurrency } = useCurrency();
 
   const [searchParams] = useSearchParams();
