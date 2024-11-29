@@ -69,9 +69,12 @@ export function useComments({ coinId }: { coinId: string }) {
             try {
                 const { error } = await supabase
                     .from("comments")
-                    .insert({ user: user.id, item_id: coinId, text, parent_id: parentId })
-                    .select("*, user(name, profile_pic)");
-
+                    .insert({
+                        user: user.id,
+                        item_id: coinId,
+                        text,
+                        parent_id: parentId,
+                    });
                 if (error) throw new Error(error.message);
 
                 await getComments();
