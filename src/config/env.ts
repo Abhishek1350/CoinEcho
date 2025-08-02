@@ -32,6 +32,9 @@ export const cryptoApiBaseUrl = assertValue(
     import.meta.env.VITE_SUPABASE_ANON_KEY,
     'Missing environment variable: VITE_SUPABASE_ANON_KEY'
   )
+
+  export const portfolioUrl = import.meta.env.VITE_PORTFOLIO_URL
+  export const aiResponseUrl = import.meta.env.VITE_AI_RESPONSE_URL
   
   
   /**
