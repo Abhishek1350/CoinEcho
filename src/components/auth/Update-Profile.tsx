@@ -17,6 +17,7 @@ import { useAuth, useAuthModal } from "@/context";
 import { supabase } from "@/lib/supabase";
 import { useMemo, useState } from "react";
 import { IconImageInPicture } from "@tabler/icons-react";
+import { generateUniqueFileName } from "@/lib/utils";
 
 interface ProfilePic {
     value: File | null;
@@ -113,9 +114,11 @@ export function UpdateProfile({ closeDrawer }: { closeDrawer: () => void }) {
         }));
 
         try {
+            const fileName = generateUniqueFileName(file.name);
+
             const { data, error } = await supabase.storage
                 .from("Profile_Pics")
-                .upload(file.name, file, {
+                .upload(fileName, file, {
                     cacheControl: "3600",
                     upsert: true,
                 });

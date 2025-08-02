@@ -147,16 +147,16 @@ export function getRelativeTime(dateString: string): string {
     let timeAgo: string;
 
     if (diffInSeconds < secondsInMinute) {
-        timeAgo = diffInSeconds <= 5 ? 'Just now' : `${diffInSeconds} seconds ago`;
+        timeAgo = diffInSeconds <= 5 ? "Just now" : `${diffInSeconds} seconds ago`;
     } else if (diffInSeconds < secondsInHour) {
         const minutes = Math.floor(diffInSeconds / secondsInMinute);
-        timeAgo = minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+        timeAgo = minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`;
     } else if (diffInSeconds < secondsInDay) {
         const hours = Math.floor(diffInSeconds / secondsInHour);
-        timeAgo = hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+        timeAgo = hours === 1 ? "1 hour ago" : `${hours} hours ago`;
     } else if (diffInSeconds < secondsInWeek) {
         const days = Math.floor(diffInSeconds / secondsInDay);
-        timeAgo = days === 1 ? '1 day ago' : `${days} days ago`;
+        timeAgo = days === 1 ? "1 day ago" : `${days} days ago`;
     } else {
         timeAgo = getTimeAgo(dateString);
     }
@@ -164,3 +164,35 @@ export function getRelativeTime(dateString: string): string {
     return timeAgo;
 }
 
+/**
+ * Generates a unique filename based on the given filename by appending a
+ * timestamp and a random suffix to it.
+ *
+ * @param {string} filename - The original filename.
+ * @returns {string} The unique filename.
+ */
+export function generateUniqueFileName(filename: string): string {
+    const MAX_LENGTH = 10;
+
+    // Get the extension and base name of the filename
+    const extension = filename.split(".").pop() || "";
+    const baseName = filename.slice(0, filename.lastIndexOf("."));
+
+    // Generate a timestamp and a random suffix
+    const timestamp = Date.now().toString();
+    const randomSuffix = Math.random().toString(36).substring(2, 6);
+
+    let uniqueName = `${timestamp}-${randomSuffix}`;
+
+    // Make sure the new filename doesn't exceed the maximum length
+    const availableSpace =
+        MAX_LENGTH - uniqueName.length - (extension ? extension.length + 1 : 0);
+
+    if (availableSpace > 0) {
+        // If there's available space, append the base name to the new filename
+        uniqueName += baseName.slice(0, availableSpace);
+    }
+
+    // Return the new filename with the extension
+    return `${uniqueName}.${extension}`;
+}
