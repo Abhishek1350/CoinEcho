@@ -64,25 +64,19 @@ export function AiAnalysis({ coinData, timePeriod }: AiAnalysisProps) {
         if (aiAnalysisState.loading) return;
         setAiAnalysisState({ ...aiAnalysisState, loading: true });
 
-        fetch(`${aiResponseUrl}/api/coin-echo/analyze`, { method: "OPTIONS" });
-
         try {
-            const response = await fetch(
-                `${aiResponseUrl}/api/coin-echo/analyze`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        coinData: extractDataForAiAnalysis(coinData),
-                        currency: selectedCurrency.name,
-                        timePeriod,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Portfolio": portfolioUrl,
-                        "origin": "https://coinecho.pages.dev",
-                    },
-                }
-            );
+            const response = await fetch(`${aiResponseUrl}/api/coin-echo/analyze`, {
+                method: "POST",
+                body: JSON.stringify({
+                    coinData: extractDataForAiAnalysis(coinData),
+                    currency: selectedCurrency.name,
+                    timePeriod,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Portfolio": portfolioUrl,
+                },
+            });
 
             if (!response.body) throw new Error("No response body");
 
