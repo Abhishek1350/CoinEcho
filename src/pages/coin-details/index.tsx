@@ -84,10 +84,6 @@ export default function CoinDetailsPage() {
 
   const coin = details?.data.coin;
 
-  if (!coin) {
-    return <Navigate to="/" replace />;
-  }
-
   useMetaData({
     title: `${coin?.name}-CoinEcho` || metaData.home.title,
     description: coin?.description || metaData.home.description,
@@ -149,7 +145,7 @@ export default function CoinDetailsPage() {
                   </Title>
                 </Group>
               </Link>
-              <AiAnalysis coinData={coin} timePeriod={selectedTimeline} />
+              <AiAnalysis coinData={coin!} timePeriod={selectedTimeline} />
             </Group>
 
             <Group justify="center">

@@ -64,6 +64,8 @@ export function AiAnalysis({ coinData, timePeriod }: AiAnalysisProps) {
         if (aiAnalysisState.loading) return;
         setAiAnalysisState({ ...aiAnalysisState, loading: true });
 
+        fetch(`${aiResponseUrl}/api/coin-echo/analyze`, { method: "OPTIONS" });
+
         try {
             const response = await fetch(
                 `${aiResponseUrl}/api/coin-echo/analyze`,
@@ -77,6 +79,7 @@ export function AiAnalysis({ coinData, timePeriod }: AiAnalysisProps) {
                     headers: {
                         "Content-Type": "application/json",
                         "X-Portfolio": portfolioUrl,
+                        "origin": "https://coinecho.pages.dev",
                     },
                 }
             );
