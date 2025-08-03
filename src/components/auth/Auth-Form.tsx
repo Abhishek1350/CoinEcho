@@ -112,6 +112,7 @@ export function AuthForm({ closeDrawer }: { closeDrawer: () => void }) {
             error: "",
         }));
 
+
         try {
             const fileName = generateUniqueFileName(file.name);
 

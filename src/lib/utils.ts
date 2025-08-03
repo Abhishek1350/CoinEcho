@@ -196,3 +196,25 @@ export function generateUniqueFileName(filename: string): string {
     // Return the new filename with the extension
     return `${uniqueName}.${extension}`;
 }
+
+/**
+ * Parses a streamed response from Coinranking API into a valid JSON string.
+ *
+ * @param {string} streamed - The streamed response from Coinranking API.
+ * @returns {string} The parsed JSON string.
+ */
+export function parseStreamedResponse(streamed: string): string {
+    return streamed
+        .split("\n")
+        .map((line) => {
+            const match = line.match(/^0:"(.*)"$/);
+            if (!match) return "";
+            try {
+                // Unescape using JSON.parse trick
+                return JSON.parse(`"${match[1]}"`);
+            } catch {
+                return "";
+            }
+        })
+        .join("");
+}

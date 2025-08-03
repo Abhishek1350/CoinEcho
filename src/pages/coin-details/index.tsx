@@ -24,6 +24,7 @@ import {
   CommentForm,
   CommentCard,
   CommentCardLoader,
+  AiAnalysis,
 } from "@/components";
 import { coinDetailsTimelineFilters } from "@/config/filters";
 import { useState } from "react";
@@ -126,23 +127,26 @@ export default function CoinDetailsPage() {
       <Container size="lg">
         <Box className={classes.header}>
           <Group justify="space-between">
-            <Link
-              to={coin?.websiteUrl || ""}
-              className={`${classes.coinName} text-secondary`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Group gap={5}>
-                <LazyImage
-                  src={coin?.iconUrl || ""}
-                  width={50}
-                  alt={coin?.name}
-                />
-                <Title fw={700}>
-                  {coin?.name} {coin?.symbol}
-                </Title>
-              </Group>
-            </Link>
+            <Group>
+              <Link
+                to={coin?.websiteUrl || ""}
+                className={`${classes.coinName} text-secondary`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Group gap={5}>
+                  <LazyImage
+                    src={coin?.iconUrl || ""}
+                    width={50}
+                    alt={coin?.name}
+                  />
+                  <Title fw={700}>
+                    {coin?.name} {coin?.symbol}
+                  </Title>
+                </Group>
+              </Link>
+              <AiAnalysis coinData={coin!} timePeriod={selectedTimeline} />
+            </Group>
 
             <Group justify="center">
               <ShareButton title={coin?.name} text={coin?.description} />
